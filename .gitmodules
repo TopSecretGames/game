@@ -1,0 +1,4 @@
+[submodule "src/Resources"]
+	path = src/Resources
+	url = https://github.com/TopSecretGames/datapack.git
+	branch = master

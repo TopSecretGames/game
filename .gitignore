@@ -1,3 +1,6 @@
+#
+src/cocos2d
+
 # Compiled Object files
 *.slo
 *.lo
@@ -5,8 +8,9 @@
 *.obj
 
 # Precompiled Headers
-*.gch
-*.pch
+#--- cocos has precompiled headers we can't ignore
+#*.gch
+#*.pch
 
 # Compiled Dynamic libraries
 *.so
