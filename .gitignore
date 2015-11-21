@@ -3,6 +3,13 @@ src/cocos2d
 src/bin
 **/build
 
+#ignore cmake temp files
+CMakeCache.txt
+CMakeFiles
+Makefile
+cmake_install.cmake
+
+
 # Compiled Object files
 *.slo
 *.lo
