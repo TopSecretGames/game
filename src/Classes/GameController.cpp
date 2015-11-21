@@ -1,4 +1,4 @@
-#include "HelloWorldScene.h"
+#include "GameController.h"
 
 USING_NS_CC;
 
@@ -7,13 +7,13 @@ enum
     kTagTileMap = 1,
 };
 
-Scene* HelloWorld::createScene()
+Scene* GameController::createScene()
 {
     // 'scene' is an autorelease object
     auto scene = Scene::create();
     
     // 'layer' is an autorelease object
-    auto layer = HelloWorld::create();
+    auto layer = GameController::create();
 
     // add layer as a child to scene
     scene->addChild(layer);
@@ -23,7 +23,7 @@ Scene* HelloWorld::createScene()
 }
 
 // on "init" you need to initialize your instance
-bool HelloWorld::init()
+bool GameController::init()
 {
     //////////////////////////////
     // 1. super init first
@@ -130,7 +130,7 @@ bool HelloWorld::init()
 }
 
 
-void HelloWorld::menuCloseCallback(Ref* pSender)
+void GameController::menuCloseCallback(Ref* pSender)
 {
     Director::getInstance()->end();
 
