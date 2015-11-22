@@ -17,7 +17,7 @@ Please follow these steps to build and run game on your machine:
 
 #Dependencies
 
-1. Cocos2d-x (http://www.cocos2d-x.org) version 3.8.1
+1. Cocos2d-x (http://www.cocos2d-x.org) version _3.9_
   Download Cocos2d of specified version and copy it to your "game" folder as "cocos2d" folder
 2. Datapack is included as sub-module. Please read GIT manual how to checkout porject with sub-modules
 
