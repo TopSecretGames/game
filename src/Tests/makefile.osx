@@ -1,0 +1,21 @@
+CC=g++
+CFLAGS=-c -std=c++0x -I ../Classes -I ../cocos2d/cocos -I ../cocos2d/external/glfw3/include/mac
+LDFLAGS=
+OUTPUT_DIR=.
+SOURCES=\
+    MoveControllerTest.cpp ../Classes/MoveController.cpp \
+
+OBJECTS=$(SOURCES:.cpp=.o)
+EXECUTABLE=run-tests
+
+all: $(SOURCES) $(EXECUTABLE) clean
+
+clean: 
+	find ./ -name "*.o" -delete
+
+$(EXECUTABLE): $(OBJECTS) 
+	$(CC) $(LDFLAGS) $(OBJECTS) -o $(OUTPUT_DIR)/$@
+
+%.o: %.cpp 
+	$(CC) $(CFLAGS) $< -o $@
+
