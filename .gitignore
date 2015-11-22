@@ -1,7 +1,9 @@
 #
 src/cocos2d
 src/bin
-**/build
+src/build
+src/proj.*
+src/*.*
 
 #ignore cmake temp files
 CMakeCache.txt
@@ -18,8 +20,8 @@ cmake_install.cmake
 
 # Precompiled Headers
 #--- cocos has precompiled headers we can't ignore
-#*.gch
-#*.pch
+*.gch
+*.pch
 
 # Compiled Dynamic libraries
 *.so
