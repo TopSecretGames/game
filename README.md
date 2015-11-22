@@ -21,5 +21,24 @@ Please follow these steps to build and run game on your machine:
   Download Cocos2d of specified version and copy it to your "game" folder as "cocos2d" folder
 2. Datapack is included as sub-module. Please read GIT manual how to checkout porject with sub-modules
 
+#How to start work with repo
 
+1. Fork repository to your own github account
+2. Clone project to your local dir
+	git clone https://github.com/<your github acc>/game.git
+3. Init resource submodule
+	git submodule init
+4. Update resources
+	git submodule update
+
+#How to sync with main repo
+
+1. For sync with main repository, use command add upstream (you need to do this step only once)
+	git remote add upstream https://github.com/TopSecretGames/game.git
+2. Fetch all remotes
+	git fetch -all
+3. Checkout to your local master
+	git checkout master
+4. Merge remote changes with your local branch
+	git merge upstream/master
 
