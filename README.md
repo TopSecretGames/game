@@ -12,14 +12,15 @@ Please follow these steps to build and run game on your machine:
 1. clone project to your local directroy, let's call it "game"
 2. install dependecies (please see Dependencies section for details)
 3. accroding to platfrom you use select correspnding path in "game". 
-    For example to build project for IOS device move to "proj.ios_mac" folder
+    For example to build project for IOS device go to "proj.ios_mac" folder
 4. follow Cocos2D instructions to setup project
 
 #Dependencies
 
-1. Cocos2d-x (http://www.cocos2d-x.org) version _3.9_
-  Download Cocos2d of specified version and copy it to your "game" folder as "cocos2d" folder
-2. Datapack is included as sub-module. Please read GIT manual how to checkout porject with sub-modules
+1. Cocos2d-x (http://www.cocos2d-x.org) 
+	version _3.9_ (https://github.com/cocos2d/cocos2d-x/tree/V3.9)
+2. Download Cocos2d of specified version and copy it to your "game" folder as "cocos2d" folder
+3. Datapack is included as sub-module. Please read GIT manual how to checkout porject with sub-modules
 
 #How to start work with repo
 
