@@ -8,7 +8,7 @@ SOURCES=\
 OBJECTS=$(SOURCES:.cpp=.o)
 EXECUTABLE=run-tests
 
-all: $(SOURCES) $(EXECUTABLE) clean
+all: $(SOURCES) $(EXECUTABLE)
 
 clean: 
 	find ./ -name "*.o" -delete
