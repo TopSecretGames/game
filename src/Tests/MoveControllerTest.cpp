@@ -18,7 +18,7 @@ TEST_CASE( "Move controller tests", "[moveController]" ) {
    SomeInterface &i = mock.get();
 
    // Will print "1". 
-   std::cout << i.foo(0) << std::endl;
+   // std::cout << i.foo(0) << std::endl;
 	
 	MoveController controller;
     REQUIRE( controller.findPlayerPoint() == cocos2d::Vec2(0,0) );
