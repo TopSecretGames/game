@@ -4,6 +4,7 @@ src/bin
 src/build
 src/proj.*
 src/*.*
+src/Tests/run-tests
 
 #ignore cmake temp files
 CMakeCache.txt
