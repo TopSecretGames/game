@@ -15,7 +15,7 @@ TEST_CASE( "Move controller tests", "[moveController]" ) {
    // Will print "1". 
    // std::cout << i.foo(0) << std::endl;
 	
-	MoveController controller;
-    auto map = cocos2d::TMXTiledMap::create("../Resources/data/map1.tmx");
+	tsg::move::MoveController controller;
+    //auto map = cocos2d::TMXTiledMap::create("../Resources/data/map1.tmx");
     //REQUIRE( controller.findPlayerPoint() == cocos2d::Vec2(0,0) );
 }

@@ -10,14 +10,14 @@
  
  Provides API to control objects position.
  */
-namespace move {
-    class MoveController : public map::IMapEventListener {
-    private:
-        cocos2d::TMXTiledMap * map;
-    public:
-        virtual void onMapLoad(cocos2d::TMXTiledMap*) override;
-    };
+namespace tsg {
+    namespace move {
+        class MoveController : public map::IMapEventListener {
+        private:
+            cocos2d::TMXTiledMap * map;
+        public:
+            virtual void onMapLoad(cocos2d::TMXTiledMap*) override;
+        };
+    }
 }
-
-
 #endif /* __MOVECONTROLLER_H__ */
