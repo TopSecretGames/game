@@ -8,7 +8,7 @@
 namespace tsg {
 namespace map {
 class MapController {
-
+  const float mapScrollSpeed =1.2;
   std::string mapsRoot;
   std::vector<IMapEventListener *> mapEventListeners;
   cocos2d::TMXTiledMap *currentMap;

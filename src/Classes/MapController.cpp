@@ -19,6 +19,12 @@ void MapController::registerListener(IMapEventListener *listener) {
 void MapController::loadMapFromFile(const std::string &map) {
   auto path = mapsRoot + map;
   this->currentMap = cocos2d::TMXTiledMap::create(path);
+  gameLayer->addChild(currentMap, 1);
+  cocos2d::Vec2 mapSize(currentMap->getContentSize());
+  cocos2d::Vec2 viewSize(gameLayer->getContentSize());
+  auto center = 1.5 * (viewSize / 2 - mapSize / 2);
+
+  gameLayer->setPosition(center);
 }
 
 void MapController::notifyListeners() {
@@ -30,26 +36,34 @@ void MapController::initTouchEvents() {
   if (eventListenersInited) return;
 
   this->listener = cocos2d::EventListenerTouchOneByOne::create();
-  this->listener->onTouchBegan = [&](cocos2d::Touch *touch,
-                                     cocos2d::Event *event) {
+  listener->setSwallowTouches(true);
+  listener->onTouchBegan = [&](cocos2d::Touch *, cocos2d::Event *) {
     this->touchPositionStarted = gameLayer->getPosition();
     return true;
   };
 
-  listener->onTouchMoved = [&](cocos2d::Touch *touch, cocos2d::Event *event) {
+  listener->onTouchMoved = [&](cocos2d::Touch *touch, cocos2d::Event *) {
     auto c = touch->getStartLocation();
     auto d = Vec2(touch->getLocation().x, touch->getLocation().y);
     d.subtract(c);
+    auto l = d.length();
     d.normalize();
-    gameLayer->setPosition(touchPositionStarted + d * 5.0);
+    gameLayer->setPosition(touchPositionStarted + d * l * mapScrollSpeed);
   };
-  listener->onTouchEnded = [&](cocos2d::Touch *touch,
-                               cocos2d::Event *event) { return true; };
+  listener->onTouchEnded = [&](cocos2d::Touch *, cocos2d::Event *) {
+    return true;
+  };
+  cocos2d::Director::getInstance()
+      ->getEventDispatcher()
+      ->addEventListenerWithFixedPriority(listener, 30);
+
+  eventListenersInited = true;
 }
 
 void MapController::loadMap(std::string map) {
   loadMapFromFile(map);
   notifyListeners();
+  initTouchEvents();
 }
 
 MapController::MapCollection MapController::getMaps() {
