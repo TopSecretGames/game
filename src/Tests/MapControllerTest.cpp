@@ -1,5 +1,6 @@
-#include "fakeit.hpp"
 #include "MapController.h"
+
+#include "fakeit.hpp"
 
 class MyListener : public tsg::map::IMapEventListener {
  public:
