@@ -1,11 +1,9 @@
 #include "MoveController.h"
 
-cocos2d::Vec2 MoveController::findPlayerPoint()
-{
-	return cocos2d::Vec2(0,0);    
-}
-
-void MoveController::movePlayer(cocos2d::Vec2 point)
-{
-
+namespace tsg {
+    namespace move {
+        void MoveController::onMapLoad(cocos2d::TMXTiledMap * map) {
+            this->map = map;
+        }
+    }    
 }

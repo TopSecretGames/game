@@ -1,7 +1,7 @@
 #include "fakeit.hpp"
 #include "MapController.h"
 
-class MyListener : public IMapEventListener {
+class MyListener : public tsg::map::IMapEventListener {
  public:
   int numCalled;
   MyListener() : numCalled(0) {};
@@ -9,7 +9,7 @@ class MyListener : public IMapEventListener {
 };
 
 
-class Mocked:public MapController{
+class Mocked:public tsg::map::MapController{
   virtual void loadMapFromFile(const std::string&){ }
 };
 using namespace fakeit;

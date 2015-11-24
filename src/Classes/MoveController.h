@@ -1,6 +1,7 @@
 #ifndef __MOVECONTROLLER_H__
 #define __MOVECONTROLLER_H__
 
+#include "IMapEventListener.h"
 #include "cocos2d.h"
 
 /*
@@ -9,19 +10,14 @@
  
  Provides API to control objects position.
  */
-class MoveController
-{
-private:
-    cocos2d::TMXTiledMap * map;
-public:
-    /*Moves out current user's player to specified point*/
-    void movePlayer(cocos2d::Vec2 point);
-
-    /*Returns current user's player point*/
-    cocos2d::Vec2 findPlayerPoint();
-    
-    void onMapLoaded(cocos2d::TMXTiledMap * map);
-};
-
-
+namespace tsg {
+    namespace move {
+        class MoveController : public map::IMapEventListener {
+        private:
+            cocos2d::TMXTiledMap * map;
+        public:
+            virtual void onMapLoad(cocos2d::TMXTiledMap*) override;
+        };
+    }
+}
 #endif /* __MOVECONTROLLER_H__ */
