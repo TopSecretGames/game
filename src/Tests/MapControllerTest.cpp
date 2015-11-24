@@ -10,7 +10,10 @@ class MyListener : public tsg::map::IMapEventListener {
 
 
 class Mocked:public tsg::map::MapController{
+  
   virtual void loadMapFromFile(const std::string&){ }
+  public:
+  Mocked():MapController(nullptr){}
 };
 using namespace fakeit;
 
