@@ -6,7 +6,7 @@ namespace tsg {
     namespace game {
         class IGameEventListener{
         public:
-            virtual void onInit(cocos2d::Scene *) = 0;
+            virtual void onInit() = 0;
             virtual ~IGameEventListener(){};
         };    
     }

@@ -1,9 +1,11 @@
 #ifndef __GAMECONTROLLER_H__
 #define __GAMECONTROLLER_H__
 
-#include "cocos2d.h"
 #include "MapController.h"
 #include "MoveController.h"
+#include "IGameEventListener.h"
+
+#include "cocos2d.h"
 
 namespace tsg {
     namespace game{
@@ -14,11 +16,12 @@ namespace tsg {
         private:
             map::MapController * mapController;
             move::MoveController * moveController;
+            std::vector<IGameEventListener *> listeners;
         public:
             static cocos2d::Scene* createScene();
             virtual bool init();
             CREATE_FUNC(GameController);
-            void registerListener();
+            void registerListener(IGameEventListener * listener);
         };
     }
 }

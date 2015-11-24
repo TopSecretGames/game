@@ -2,17 +2,17 @@
 #include "MapController.h"
 #include "MoveController.h"
 
-USING_NS_CC;
+#include <algorithm>
 
 enum
 {
     kTagTileMap = 1,
 };
 
-Scene* tsg::game::GameController::createScene()
+cocos2d::Scene* tsg::game::GameController::createScene()
 {
     // 'scene' is an autorelease object
-    auto scene = Scene::create();
+    auto scene = cocos2d::Scene::create();
     
     // 'layer' is an autorelease object
     auto layer = GameController::create();
@@ -24,21 +24,24 @@ Scene* tsg::game::GameController::createScene()
     return scene;
 }
 
-// on "init" you need to initialize your instance
-bool tsg::game::GameController::init()
-{
-    //////////////////////////////
-    // 1. super init first
-    if ( !Layer::init() )
-    {
+void tsg::game::GameController::registerListener(IGameEventListener * listener) {
+    this->listeners.push_back(listener);
+}
+
+bool tsg::game::GameController::init() {
+    if ( !Layer::init() ) {
         return false;
     }
     CCLOG("initializing controllers");
     this->mapController = new map::MapController();
     this->moveController = new move::MoveController();
     CCLOG("controllers initialized");
-    
-    
+    for_each(listeners.begin(), listeners.end(), [](IGameEventListener *l) {l->onInit();});
+
+    //todo refactor below code
+    //
+    //
+    //
 //    Size visibleSize = Director::getInstance()->getVisibleSize();
 //    Vec2 origin = Director::getInstance()->getVisibleOrigin();
 //    auto map = TMXTiledMap::create("data/map1.tmx");
