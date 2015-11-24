@@ -1,10 +1,32 @@
-CC=g++
-CFLAGS=-c -std=c++0x -I ../Classes -I ../cocos2d/cocos -I ../cocos2d/external/glfw3/include/mac
-LDFLAGS=
-OUTPUT_DIR=.
-SOURCES=\
-    MoveControllerTest.cpp ../Classes/MoveController.cpp \
+#temporary hacked-make file which allows to run tests on OS X
+#
+#
 
+CC=g++
+CFLAGS=-c -std=c++0x \
+	-I ../Classes \
+	-I ../cocos2d/cocos \
+	-I ../cocos2d/external/glfw3/include/mac
+	
+LDFLAGS=\
+    -framework OpenGL \
+    -framework GLKit \
+    -framework CoreGraphics \
+    -framework AppKit \
+    -framework AudioToolbox \
+    -framework AVFoundation \
+    -framework OpenAL \
+    -framework QuartzCore \
+	-framework Foundation \
+	-framework IOKit \
+    -L. \
+    -lcocos2d \
+    -lz \
+    -liconv
+		
+
+OUTPUT_DIR=.
+SOURCES=$(wildcard *.cpp) $(wildcard ../Classes/*.cpp) 
 OBJECTS=$(SOURCES:.cpp=.o)
 EXECUTABLE=run-tests
 
