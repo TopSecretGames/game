@@ -11,9 +11,8 @@ namespace tsg {
             auto objectGroup = map->getObjectGroup("spawn point");
             assert(objectGroup != nullptr);
             auto sp = objectGroup->getObject("spawn1");
-            assert (sp["x"].asFloat() != 0.0);
             auto point = cocos2d::Vec2(sp["x"].asFloat(), sp["y"].asFloat());
-//            assert (point != cocos2d::Vec2(0.0f,0.0f));
+            assert(point != cocos2d::Vec2::ZERO);
             return point;
         }
     }    

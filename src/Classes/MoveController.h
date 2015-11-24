@@ -13,7 +13,7 @@ namespace tsg {
          Provides API to control objects position.
          */
         class MoveController : public map::IMapEventListener {
-        private:
+        protected:
             cocos2d::TMXTiledMap * map;
             cocos2d::Vec2 playerSpawn;
             virtual cocos2d::Vec2 findPlayerSpawn() const;
