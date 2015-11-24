@@ -1,4 +1,6 @@
 #include "GameController.h"
+#include "MapController.h"
+#include "MoveController.h"
 
 USING_NS_CC;
 
@@ -7,7 +9,7 @@ enum
     kTagTileMap = 1,
 };
 
-Scene* GameController::createScene()
+Scene* game::GameController::createScene()
 {
     // 'scene' is an autorelease object
     auto scene = Scene::create();
@@ -23,7 +25,7 @@ Scene* GameController::createScene()
 }
 
 // on "init" you need to initialize your instance
-bool GameController::init()
+bool game::GameController::init()
 {
     //////////////////////////////
     // 1. super init first
@@ -31,6 +33,9 @@ bool GameController::init()
     {
         return false;
     }
+    
+    map::MapController mapController;
+    
     
     Size visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
@@ -129,8 +134,7 @@ bool GameController::init()
     return true;
 }
 
-
-void GameController::menuCloseCallback(Ref* pSender)
+void game::GameController::menuCloseCallback(Ref* pSender)
 {
     Director::getInstance()->end();
 

@@ -1,0 +1,5 @@
+Instructions for OS X
+
+1. Copy static library "libcoco2d Mac.a" from Xcode here and rename it to "libcocos2d.a"
+2. make -f makefile.osx
+3. ./run-tests 
