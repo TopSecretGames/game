@@ -31,10 +31,11 @@ bool tsg::game::GameController::init() {
     return false;
   }
   CCLOG("initializing controllers");
-  this->mapController = new map::MapController();
+    this->mapController = new map::MapController(dynamic_cast<cocos2d::Layer*>(this));
   this->moveController = new move::MoveController();
   CCLOG("controllers initialized");
   for_each(listeners.begin(), listeners.end(),
            [](IGameEventListener* l) { l->onInit(); });
+    mapController->loadMap("data/map1.tmx");
   return true;
 }
