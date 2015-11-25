@@ -1,5 +1,6 @@
-#include "fakeit.hpp"
 #include "MapController.h"
+
+#include "fakeit.hpp"
 
 class MyListener : public tsg::map::IMapEventListener {
  public:
@@ -8,23 +9,21 @@ class MyListener : public tsg::map::IMapEventListener {
   virtual void onMapLoad(cocos2d::TMXTiledMap *) { ++numCalled; }
 };
 
+class Mocked : public tsg::map::MapController {
+  virtual void loadMapFromFile(const std::string &) {}
 
-class Mocked:public tsg::map::MapController{
-  
-  virtual void loadMapFromFile(const std::string&){ }
-  public:
-  Mocked():MapController(nullptr){}
+ public:
+  Mocked() : MapController(nullptr) {}
 };
+
 using namespace fakeit;
 
 TEST_CASE("Map controller tests", "[MapController]") {
-
-  // cocos2d::TMXTiledMap tmm;
 
   Mocked mocked;
   MyListener listener;
 
   mocked.registerListener(&listener);
-  mocked.loadMap("map1.tmx");
+  mocked.loadMap("data/map1.tmx");
   REQUIRE(listener.numCalled == 1);
 }

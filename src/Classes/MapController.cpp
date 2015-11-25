@@ -8,7 +8,7 @@ MapController::MapController(cocos2d::Layer *layer, const std::string root)
     : mapsRoot(root), gameLayer(layer) {};
 
 MapController::MapController(cocos2d::Layer *layer)
-    : mapsRoot("data/"), gameLayer(layer) {};
+    : mapsRoot(""), gameLayer(layer) {};
 MapController::MapController(const MapController &)
     : mapsRoot(""), currentMap(nullptr) {};
 
@@ -50,9 +50,8 @@ void MapController::initTouchEvents() {
     d.normalize();
     gameLayer->setPosition(touchPositionStarted + d * l * mapScrollSpeed);
   };
-  listener->onTouchEnded = [&](cocos2d::Touch *, cocos2d::Event *) {
-    return true;
-  };
+  listener->onTouchEnded = [&](cocos2d::Touch *,
+                               cocos2d::Event *) { return true; };
   cocos2d::Director::getInstance()
       ->getEventDispatcher()
       ->addEventListenerWithFixedPriority(listener, 30);
@@ -64,12 +63,6 @@ void MapController::loadMap(std::string map) {
   loadMapFromFile(map);
   notifyListeners();
   initTouchEvents();
-}
-
-MapController::MapCollection MapController::getMaps() {
-  std::vector<MapType> collection;
-  collection.push_back(std::make_tuple("FirstMap", "map1.tmx"));
-  return collection;
 }
 }
 }

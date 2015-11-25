@@ -19,16 +19,15 @@ class MapController {
   typedef std::vector<MapType> MapCollection;
   void notifyListeners();
   void initTouchEvents();
+  virtual void loadMapFromFile(const std::string &);
 
  protected:
  public:
-  virtual void loadMapFromFile(const std::string &);
 
   MapController(const MapController &);
   MapController(cocos2d::Layer*);
   MapController(cocos2d::Layer*, std::string);
 
-  MapCollection getMaps();
   void loadMap(std::string);
   void registerListener(IMapEventListener *);
 };
