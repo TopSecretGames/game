@@ -1,21 +1,31 @@
-#define CATCH_CONFIG_MAIN  // This tells Catch to provide a main() - only do this in one cpp file
-
 #include "MoveController.h"
 #include "fakeit.hpp"
 
-TEST_CASE( "Move controller tests", "[moveController]" ) {
-//	fakeit::Mock<cocos2d::TMXTiledMap> mock;
+using namespace fakeit;
 
-   // Setup mock behavior.
-   //fakeit::When(Method(mock,foo)).Return(1); // Method mock.foo will return 1 once.
+class ExposedController : public tsg::move::MoveController {
+ public:
+  virtual cocos2d::Vec2 getPlayerSpawn() const;
+};
 
-   // Fetch the mock instance.
-   //SomeInterface &i = mock.get();
+cocos2d::Vec2 ExposedController::getPlayerSpawn() const { return playerSpawn; }
 
-   // Will print "1". 
-   // std::cout << i.foo(0) << std::endl;
-	
-	tsg::move::MoveController controller;
-    //auto map = cocos2d::TMXTiledMap::create("../Resources/data/map1.tmx");
-    //REQUIRE( controller.findPlayerPoint() == cocos2d::Vec2(0,0) );
+TEST_CASE("That spawn point found and loaded well", "[MoveController]") {
+  cocos2d::Vector<cocos2d::TMXObjectGroup*> groups;
+  cocos2d::TMXObjectGroup group;
+  group.setGroupName("spawn point");
+  cocos2d::ValueVector v;
+  cocos2d::ValueMap vp;
+  vp["name"] = "spawn1";
+  vp["x"] = cocos2d::Value(1.0f);
+  vp["y"] = cocos2d::Value(2.0f);
+  v.push_back(cocos2d::Value(vp));
+  group.setObjects(v);
+  groups.pushBack(&group);
+  cocos2d::TMXTiledMap map;
+  map.setObjectGroups(groups);
+
+  ExposedController controller;
+  controller.onMapLoad(&map);
+  REQUIRE(controller.getPlayerSpawn() == cocos2d::Vec2(1.0f, 2.0f));
 }
