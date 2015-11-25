@@ -6,9 +6,11 @@ using namespace fakeit;
 class ExposedController : public tsg::move::MoveController {
  public:
   virtual cocos2d::Vec2 getPlayerSpawn() const;
+  virtual cocos2d::Vec2 getPlayerPosition() const;
 };
 
 cocos2d::Vec2 ExposedController::getPlayerSpawn() const { return playerSpawn; }
+cocos2d::Vec2 ExposedController::getPlayerPosition() const { return playerPosiiton; }
 
 TEST_CASE("That spawn point found and loaded well", "[MoveController]") {
   cocos2d::Vector<cocos2d::TMXObjectGroup*> groups;
@@ -28,4 +30,5 @@ TEST_CASE("That spawn point found and loaded well", "[MoveController]") {
   ExposedController controller;
   controller.onMapLoad(&map);
   REQUIRE(controller.getPlayerSpawn() == cocos2d::Vec2(1.0f, 2.0f));
+  REQUIRE(controller.getPlayerPosition() == controller.getPlayerSpawn());
 }
