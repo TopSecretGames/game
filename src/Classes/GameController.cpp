@@ -36,6 +36,6 @@ bool tsg::game::GameController::init() {
   CCLOG("controllers initialized");
   for_each(listeners.begin(), listeners.end(),
            [](IGameEventListener* l) { l->onInit(); });
-    mapController->loadMap("map1.tmx");
+    mapController->loadMap("data/map1.tmx");
   return true;
 }
