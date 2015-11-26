@@ -21,6 +21,7 @@ class GameController : public cocos2d::Layer {
  public:
   static cocos2d::Scene* createScene();
   virtual bool init();
+  virtual void update( float) override;
   CREATE_FUNC(GameController);
   void registerListener(IGameEventListener* listener);
 };

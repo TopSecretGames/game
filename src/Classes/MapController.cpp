@@ -64,5 +64,9 @@ void MapController::loadMap(std::string map) {
   notifyListeners();
   initTouchEvents();
 }
+
+void MapController::onInit(){}
+void MapController::onUpdate(float delta){
+}
 }
 }

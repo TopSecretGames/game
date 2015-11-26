@@ -5,9 +5,10 @@
 #include <vector>
 
 #include "IMapEventListener.h"
+#include "IGameEventListener.h"
 namespace tsg {
 namespace map {
-class MapController {
+class MapController:public tsg::game::IGameEventListener {
   const float mapScrollSpeed =1.2;
   std::string mapsRoot;
   std::vector<IMapEventListener *> mapEventListeners;
@@ -20,6 +21,9 @@ class MapController {
   void notifyListeners();
   void initTouchEvents();
   virtual void loadMapFromFile(const std::string &);
+  virtual void onInit();
+  virtual void onUpdate(float);
+
 
  protected:
  public:
