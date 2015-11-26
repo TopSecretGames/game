@@ -69,6 +69,11 @@ void MapController::loadMap(std::string map) {
   initTouchEvents();
 }
 
+void MapController::onInit(){}
+
+void MapController::onUpdate(float delta){
+}
+
 void MapController::lookAt(cocos2d::Vec2 position){
   gameLayer->setPosition(position);
 }
