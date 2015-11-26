@@ -1,8 +1,11 @@
 #include "GameController.h"
 #include "MapController.h"
 #include "MoveController.h"
-
 #include <algorithm>
+
+enum {
+  kTagTileMap = 1,
+};
 
 cocos2d::Scene* tsg::game::GameController::createScene() {
   // 'scene' is an autorelease object
@@ -27,11 +30,18 @@ bool tsg::game::GameController::init() {
     return false;
   }
   CCLOG("initializing controllers");
-  this->mapController = new map::MapController(dynamic_cast<cocos2d::Layer*>(this));
+  this->mapController = new map::MapController(this);
   this->moveController = new move::MoveController();
   CCLOG("controllers initialized");
+  this->registerListener(mapController);
   for_each(listeners.begin(), listeners.end(),
            [](IGameEventListener* l) { l->onInit(); });
-//  mapController->loadMap("data/map1.tmx");
+  mapController->loadMap("data/map1.tmx");
+  this->scheduleUpdate();
   return true;
+}
+
+void tsg::game::GameController::update(float delta) {
+  for_each(listeners.begin(), listeners.end(),
+           [delta](IGameEventListener* l) { l->onUpdate(delta); });
 }

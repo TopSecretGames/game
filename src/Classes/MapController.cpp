@@ -1,8 +1,6 @@
 #include "MapController.h"
 #include <iostream>
 
-#include <random>
-
 namespace tsg {
 namespace map {
 using cocos2d::Vec2;
@@ -24,7 +22,8 @@ void MapController::loadMapFromFile(const std::string &map) {
   gameLayer->addChild(currentMap, 1);
   cocos2d::Vec2 mapSize(currentMap->getContentSize());
   cocos2d::Vec2 viewSize(gameLayer->getContentSize());
-  auto center =  (viewSize / 2 - mapSize / 2);
+  auto center = 1.5 * (viewSize / 2 - mapSize / 2);
+
   gameLayer->setPosition(center);
 }
 
@@ -49,13 +48,10 @@ void MapController::initTouchEvents() {
     d.subtract(c);
     auto l = d.length();
     d.normalize();
-    auto position = touchPositionStarted + d * l * mapScrollSpeed;
-    gameLayer->setPosition(position);
+    gameLayer->setPosition(touchPositionStarted + d * l * mapScrollSpeed);
   };
   listener->onTouchEnded = [&](cocos2d::Touch *,
-                               cocos2d::Event *) { 
-    return true; 
-  };
+                               cocos2d::Event *) { return true; };
   cocos2d::Director::getInstance()
       ->getEventDispatcher()
       ->addEventListenerWithFixedPriority(listener, 30);
@@ -69,9 +65,8 @@ void MapController::loadMap(std::string map) {
   initTouchEvents();
 }
 
-void MapController::lookAt(cocos2d::Vec2 position){
-  gameLayer->setPosition(position);
+void MapController::onInit(){}
+void MapController::onUpdate(float delta){
 }
-
 }
 }
