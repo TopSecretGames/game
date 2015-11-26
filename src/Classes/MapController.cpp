@@ -1,6 +1,8 @@
 #include "MapController.h"
 #include <iostream>
 
+#include <random>
+
 namespace tsg {
 namespace map {
 using cocos2d::Vec2;
@@ -22,8 +24,7 @@ void MapController::loadMapFromFile(const std::string &map) {
   gameLayer->addChild(currentMap, 1);
   cocos2d::Vec2 mapSize(currentMap->getContentSize());
   cocos2d::Vec2 viewSize(gameLayer->getContentSize());
-  auto center = 1.5 * (viewSize / 2 - mapSize / 2);
-
+  auto center = (viewSize / 2 - mapSize / 2);
   gameLayer->setPosition(center);
 }
 
@@ -39,6 +40,7 @@ void MapController::initTouchEvents() {
   listener->setSwallowTouches(true);
   listener->onTouchBegan = [&](cocos2d::Touch *, cocos2d::Event *) {
     this->touchPositionStarted = gameLayer->getPosition();
+    touchActive = true;
     return true;
   };
 
@@ -48,10 +50,24 @@ void MapController::initTouchEvents() {
     d.subtract(c);
     auto l = d.length();
     d.normalize();
-    gameLayer->setPosition(touchPositionStarted + d * l * mapScrollSpeed);
+    auto position = touchPositionStarted + d * l * mapScrollSpeed;
+    gameLayer->setPosition(position);
+    previousTouchPosition = touch->getPreviousLocation();
+    previosTime = std::chrono::system_clock::now();
   };
-  listener->onTouchEnded = [&](cocos2d::Touch *,
-                               cocos2d::Event *) { return true; };
+  listener->onTouchEnded = [&](cocos2d::Touch *touch, cocos2d::Event *) {
+    auto now = std::chrono::system_clock::now();
+    std::chrono::duration<double, std::ratio<1> > duration = now - previosTime;
+
+    currentSpeed = (touch->getLocation() - previousTouchPosition) /
+                   duration.count() / 1000;
+    std::cout << "Cur speed" << currentSpeed.x << "," << currentSpeed.y << " "
+              << duration.count() << " " << previousTouchPosition.x << ","
+              << previousTouchPosition.y << " " << touch->getLocation().x << ","
+              << touch->getLocation().y << "\n";
+    touchActive = false;
+    return true;
+  };
   cocos2d::Director::getInstance()
       ->getEventDispatcher()
       ->addEventListenerWithFixedPriority(listener, 30);
@@ -65,8 +81,16 @@ void MapController::loadMap(std::string map) {
   initTouchEvents();
 }
 
-void MapController::onInit(){}
-void MapController::onUpdate(float delta){
+void MapController::onInit() {}
+void MapController::onUpdate(float delta) {
+  if (currentSpeed.length() < 0.3 || touchActive) return;
+  currentSpeed *= 0.95;
+  auto dx = currentSpeed * delta;
+  auto old = gameLayer->getPosition();
+  gameLayer->setPosition(old + dx);
+}
+void MapController::lookAt(cocos2d::Vec2 position) {
+  gameLayer->setPosition(position);
 }
 }
 }

@@ -3,6 +3,7 @@
 #include <string>
 #include <tuple>
 #include <vector>
+#include <chrono>
 
 #include "IMapEventListener.h"
 #include "IGameEventListener.h"
@@ -10,6 +11,12 @@ namespace tsg {
 namespace map {
 class MapController:public tsg::game::IGameEventListener {
   const float mapScrollSpeed =1.2;
+  const float deacceleration = 100;
+  cocos2d::Vec2 previousTouchPosition;
+  std::chrono::time_point<std::chrono::system_clock> previosTime;
+  cocos2d::Vec2 currentSpeed;
+  bool touchActive = false;
+
   std::string mapsRoot;
   std::vector<IMapEventListener *> mapEventListeners;
   cocos2d::TMXTiledMap *currentMap;
