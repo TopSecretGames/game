@@ -21,8 +21,8 @@ class MapController {
   void initTouchEvents();
   virtual void loadMapFromFile(const std::string &);
 
- protected:
  public:
+
 
   MapController(const MapController &);
   MapController(cocos2d::Layer*);
@@ -30,6 +30,7 @@ class MapController {
 
   void loadMap(std::string);
   void registerListener(IMapEventListener *);
+  void lookAt(cocos2d::Vec2);
 };
 }
 }
