@@ -25,8 +25,8 @@ class MapController:public tsg::game::IGameEventListener {
   virtual void onUpdate(float);
 
 
- protected:
  public:
+
 
   MapController(const MapController &);
   MapController(cocos2d::Layer*);
@@ -34,6 +34,7 @@ class MapController:public tsg::game::IGameEventListener {
 
   void loadMap(std::string);
   void registerListener(IMapEventListener *);
+  void lookAt(cocos2d::Vec2);
 };
 }
 }
