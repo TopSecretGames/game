@@ -10,8 +10,10 @@
 namespace tsg {
 namespace map {
 class MapController:public tsg::game::IGameEventListener {
-  const float mapScrollSpeed =1.2;
-  const float deacceleration = 100;
+  const float mapScrollSpeed = 1.2;
+  const float minScrollSpeed = 20.0;
+  float scrollFriction = 3.0;
+
   cocos2d::Vec2 previousTouchPosition;
   std::chrono::time_point<std::chrono::system_clock> previosTime;
   cocos2d::Vec2 currentSpeed;
@@ -48,6 +50,7 @@ class MapController:public tsg::game::IGameEventListener {
   void loadMap(std::string);
   void registerListener(IMapEventListener *);
   void lookAt(cocos2d::Vec2);
+  void setScrollFriction(float);
 };
 }
 }
