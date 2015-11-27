@@ -31,6 +31,12 @@ class MapController:public tsg::game::IGameEventListener {
   virtual void onInit();
   virtual void onUpdate(float);
 
+  bool onTouchBegan(cocos2d::Touch *);
+  bool onTouchMoved(cocos2d::Touch *);
+  bool onTouchEnded(cocos2d::Touch *);
+
+  void processInertialScroll(float delta);
+
 
  public:
 
