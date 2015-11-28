@@ -2,28 +2,21 @@
 
 #include "fakeit.hpp"
 
-class MyListener : public tsg::map::IMapEventListener {
- public:
-  int numCalled;
-  MyListener() : numCalled(0) {};
-  virtual void onMapLoad(cocos2d::TMXTiledMap *) { ++numCalled; }
-};
-
-class Mocked : public tsg::map::MapController {
+class MapControllerMock : public tsg::map::MapController {
   virtual void loadMapFromFile(const std::string &) {}
-
- public:
-  Mocked() : MapController(nullptr) {}
+  //  virtual void initTouchEvents() {}
+public:
+  MapControllerMock() : MapController(nullptr) {}
 };
 
 using namespace fakeit;
 
-TEST_CASE("Map controller tests", "[MapController]") {
-
-  Mocked mocked;
-  MyListener listener;
-
-  mocked.registerListener(&listener);
-  mocked.loadMap("data/map1.tmx");
-  REQUIRE(listener.numCalled == 1);
+TEST_CASE("That map listener will be notified on map load", "[MapController]") {
+  Mock<tsg::map::IMapEventListener> listenerMock;
+  MapControllerMock controllerMock;
+  When(Method(listenerMock, onMapLoad)).Return();
+  controllerMock.registerListener(&listenerMock.get());
+  Verify(Method(listenerMock, onMapLoad)).Exactly(0);
+  controllerMock.loadMap("test/map");
+  Verify(Method(listenerMock, onMapLoad)).Exactly(1);
 }

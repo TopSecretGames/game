@@ -6,8 +6,8 @@
 namespace tsg {
 namespace map {
 class IMapEventListener {
- public:
-  virtual void onMapLoad(cocos2d::TMXTiledMap*) = 0;
+public:
+  virtual void onMapLoad(cocos2d::TMXTiledMap *) = 0;
   virtual ~IMapEventListener(){};
 };
 }

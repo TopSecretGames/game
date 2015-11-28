@@ -1,5 +1,4 @@
-#define CATCH_CONFIG_MAIN  // This tells Catch to provide a main() - only do
-                           // this in one cpp file
+#define CATCH_CONFIG_MAIN
 
 #include "GameController.h"
 #include "IGameEventListener.h"
@@ -8,13 +7,16 @@
 
 using namespace fakeit;
 
-TEST_CASE("Tests that game event listeners got notified well",
-          "[GameController]") {
-  Mock<tsg::game::IGameEventListener> listenerMock;
-  When(Method(listenerMock, onInit)).Return();
+TEST_CASE("That game event listener got notified well", "[GameController]") {
+  Mock<tsg::move::MoveController> moveControllerMock;
+  Mock<tsg::map::MapController> mapControllerMock;
   tsg::game::GameController controller;
-  controller.registerListener(&listenerMock.get());
-  Verify(Method(listenerMock, onInit)).Exactly(0);
+  controller.injectControllers(&moveControllerMock.get(),
+                               &mapControllerMock.get());
+  When(Method(mapControllerMock, loadMap)).Return();
+  When(Method(mapControllerMock, IGameEventListener::onInit)).Return();
+  When(Method(mapControllerMock, IGameEventListener::onUpdate)).Return();
+    Verify(Method(mapControllerMock, IGameEventListener::onInit)).Exactly(0);
   controller.init();
-  Verify(Method(listenerMock, onInit)).Exactly(1);
+  Verify(Method(mapControllerMock, IGameEventListener::onInit)).Exactly(1);
 }

@@ -2,17 +2,17 @@
 
 namespace tsg {
 namespace move {
-void MoveController::onMapLoad(cocos2d::TMXTiledMap* map) {
+void MoveController::onMapLoad(cocos2d::TMXTiledMap *map) {
   this->map = map;
   this->playerSpawn = findPlayerSpawn();
   respawnPlayer();
 }
 
 void MoveController::respawnPlayer() {
-    this->playerPosiiton = this->playerSpawn;
-    //lookAt()
+  this->playerPosiiton = this->playerSpawn;
+  // lookAt()
 }
-    
+
 cocos2d::Vec2 MoveController::findPlayerSpawn() const {
   auto objectGroup = map->getObjectGroup("spawn point");
   assert(objectGroup != nullptr);

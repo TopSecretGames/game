@@ -9,7 +9,7 @@
 #include "IGameEventListener.h"
 namespace tsg {
 namespace map {
-class MapController:public tsg::game::IGameEventListener {
+class MapController : public tsg::game::IGameEventListener {
   const float mapScrollSpeed = 1.2;
   const float minScrollSpeed = 20.0;
   float scrollFriction = 3.0;
@@ -21,10 +21,10 @@ class MapController:public tsg::game::IGameEventListener {
 
   std::string mapsRoot;
   std::vector<IMapEventListener *> mapEventListeners;
-  cocos2d::TMXTiledMap *currentMap;
   cocos2d::EventListenerTouchOneByOne *listener;
   cocos2d::Vec2 touchPositionStarted;
   cocos2d::Layer *gameLayer;
+  cocos2d::TMXTiledMap *currentMap;
   typedef std::tuple<std::string, std::string> MapType;
   typedef std::vector<MapType> MapCollection;
   void notifyListeners();
@@ -39,15 +39,12 @@ class MapController:public tsg::game::IGameEventListener {
 
   void processInertialScroll(float delta);
 
-
- public:
-
-
+public:
   MapController(const MapController &);
-  MapController(cocos2d::Layer*);
-  MapController(cocos2d::Layer*, std::string);
+  MapController(cocos2d::Layer *);
+  MapController(cocos2d::Layer *, std::string);
 
-  void loadMap(std::string);
+  virtual void loadMap(std::string);
   void registerListener(IMapEventListener *);
   void lookAt(cocos2d::Vec2);
   void setScrollFriction(float);
