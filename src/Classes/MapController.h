@@ -39,14 +39,14 @@ class MapController : public tsg::game::IGameEventListener {
 
   void processInertialScroll(float delta);
 
-public:
+ public:
   MapController(const MapController &);
   MapController(cocos2d::Layer *);
   MapController(cocos2d::Layer *, std::string);
 
   virtual void loadMap(std::string);
+  virtual void lookAt(cocos2d::Vec2);
   void registerListener(IMapEventListener *);
-  void lookAt(cocos2d::Vec2);
   void setScrollFriction(float);
 };
 }

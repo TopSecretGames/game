@@ -1,27 +1,13 @@
 #include "GameController.h"
-#include "MapController.h"
-#include "MoveController.h"
-#include <algorithm>
 
-tsg::game::GameController *instantiate() {
-  tsg::game::GameController *pRet =
-      new (std::nothrow) tsg::game::GameController();
-  if (pRet) {
-    pRet->injectControllers();
-    if (pRet->init()) {
-      pRet->autorelease();
-      return pRet;
-    }
-  }
-  delete pRet;
-  pRet = nullptr;
-  return nullptr;
-};
+#include <algorithm>
 
 cocos2d::Scene *tsg::game::GameController::createScene() {
   auto scene = cocos2d::Scene::create();
-  auto controller = instantiate();
+  auto controller = tsg::game::GameController::getInstance();
   scene->addChild(controller);
+  controller->injectControllers();
+  controller->init();
   return scene;
 }
 
@@ -57,3 +43,15 @@ void tsg::game::GameController::update(float delta) {
   for_each(listeners.begin(), listeners.end(),
            [delta](IGameEventListener *l) { l->onUpdate(delta); });
 }
+
+tsg::map::MapController *tsg::game::GameController::getMapController() {
+  return this->mapController;
+}
+
+tsg::move::MoveController *tsg::game::GameController::getMoveController() {
+  return this->moveController;
+}
+
+tsg::game::GameController *tsg::game::GameController::p_instance = 0;
+
+tsg::game::GameController::GameController() {}
