@@ -43,8 +43,6 @@ Please follow these steps to build and run game on your machine:
 4. Merge remote changes with your local branch
 	git merge upstream/master
 
-#Notes for contributors
-
 #Code formatting:
 
 We respect netty codding and that's why we use Google-code style. 
