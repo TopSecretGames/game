@@ -1,10 +1,19 @@
 #include "MoveController.h"
+#include "GameController.h"
 
 namespace tsg {
 namespace move {
-void MoveController::onMapLoad(cocos2d::TMXTiledMap* map) {
+
+void MoveController::onMapLoad(cocos2d::TMXTiledMap *map) {
   this->map = map;
-  playerSpawn = findPlayerSpawn();
+  this->playerSpawn = findPlayerSpawn();
+  respawnPlayer();
+}
+
+void MoveController::respawnPlayer() {
+  playerPosiiton = playerSpawn;
+  auto gameController = tsg::game::GameController::getInstance();
+  gameController->getMapController()->lookAt(playerSpawn);
 }
 
 cocos2d::Vec2 MoveController::findPlayerSpawn() const {

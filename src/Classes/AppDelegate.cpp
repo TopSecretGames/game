@@ -25,7 +25,7 @@ void AppDelegate::initGLContextAttrs() {
 // If you want to use packages manager to install more packages,
 // don't modify or remove this function
 static int register_all_packages() {
-  return 0;  // flag for packages manager
+  return 0; // flag for packages manager
 }
 
 bool AppDelegate::applicationDidFinishLaunching() {
@@ -33,8 +33,8 @@ bool AppDelegate::applicationDidFinishLaunching() {
   auto director = Director::getInstance();
   auto glview = director->getOpenGLView();
   if (!glview) {
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || \
-    (CC_TARGET_PLATFORM == CC_PLATFORM_MAC) ||   \
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) ||                               \
+    (CC_TARGET_PLATFORM == CC_PLATFORM_MAC) ||                                 \
     (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
     glview = GLViewImpl::createWithRect(
         "IsoGame",

@@ -14,16 +14,32 @@ namespace game {
  */
 class GameController : public cocos2d::Layer {
  private:
-  map::MapController* mapController;
-  move::MoveController* moveController;
-  std::vector<IGameEventListener*> listeners;
+  GameController();
+  GameController(const GameController &);
+  GameController &operator=(GameController &);
+
+  static GameController *p_instance;
+  map::MapController *mapController;
+  move::MoveController *moveController;
+  std::vector<IGameEventListener *> listeners;
 
  public:
-  static cocos2d::Scene* createScene();
-  virtual bool init();
-  virtual void update( float) override;
-  CREATE_FUNC(GameController);
-  void registerListener(IGameEventListener* listener);
+  static GameController *getInstance() {
+    if (!p_instance) {
+      p_instance = new GameController();
+    }
+    return p_instance;
+  }
+  static cocos2d::Scene *createScene();
+  bool init() override;
+  void update(float) override;
+  void injectControllers();
+  void injectControllers(move::MoveController *moveController,
+                         map::MapController *mapController);
+
+  map::MapController *getMapController();
+  move::MoveController *getMoveController();
+  void registerListener(IGameEventListener *listener);
 };
 }
 }

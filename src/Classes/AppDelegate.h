@@ -10,7 +10,7 @@ The reason for implement as private inheritance is to hide some interface call
 by Director.
 */
 class AppDelegate : private cocos2d::Application {
- public:
+public:
   AppDelegate();
   virtual ~AppDelegate();
 
@@ -36,4 +36,4 @@ class AppDelegate : private cocos2d::Application {
   virtual void applicationWillEnterForeground();
 };
 
-#endif  // _APP_DELEGATE_H_
+#endif // _APP_DELEGATE_H_

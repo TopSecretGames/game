@@ -7,12 +7,12 @@ namespace tsg {
 namespace map {
 using cocos2d::Vec2;
 MapController::MapController(cocos2d::Layer *layer, const std::string root)
-    : mapsRoot(root), gameLayer(layer) {};
+    : mapsRoot(root), gameLayer(layer){};
 
 MapController::MapController(cocos2d::Layer *layer)
-    : mapsRoot(""), gameLayer(layer) {};
+    : mapsRoot(""), gameLayer(layer){};
 MapController::MapController(const MapController &)
-    : mapsRoot(""), currentMap(nullptr) {};
+    : mapsRoot(""), currentMap(nullptr){};
 
 void MapController::registerListener(IMapEventListener *listener) {
   this->mapEventListeners.push_back(listener);
@@ -29,7 +29,8 @@ void MapController::loadMapFromFile(const std::string &map) {
 }
 
 void MapController::notifyListeners() {
-  for (auto listener : mapEventListeners) listener->onMapLoad(this->currentMap);
+  for (auto listener : mapEventListeners)
+    listener->onMapLoad(this->currentMap);
 }
 
 bool MapController::onTouchBegan(cocos2d::Touch *touch) {
@@ -53,7 +54,7 @@ bool MapController::onTouchMoved(cocos2d::Touch *touch) {
 
 bool MapController::onTouchEnded(cocos2d::Touch *touch) {
   auto now = std::chrono::system_clock::now();
-  std::chrono::duration<double, std::ratio<1> > duration = now - previosTime;
+  std::chrono::duration<double, std::ratio<1>> duration = now - previosTime;
 
   currentSpeed =
       (touch->getLocation() - previousTouchPosition) / duration.count() / 1000;
@@ -63,17 +64,21 @@ bool MapController::onTouchEnded(cocos2d::Touch *touch) {
 
 void MapController::initTouchEvents() {
   static bool eventListenersInited = false;
-  if (eventListenersInited) return;
+  if (eventListenersInited)
+    return;
 
   this->listener = cocos2d::EventListenerTouchOneByOne::create();
   listener->setSwallowTouches(true);
 
-  listener->onTouchBegan = [&](
-      cocos2d::Touch *touch, cocos2d::Event *) { return onTouchBegan(touch); };
-  listener->onTouchMoved = [&](
-      cocos2d::Touch *touch, cocos2d::Event *) { return onTouchMoved(touch); };
-  listener->onTouchEnded = [&](
-      cocos2d::Touch *touch, cocos2d::Event *) { return onTouchEnded(touch); };
+  listener->onTouchBegan = [&](cocos2d::Touch *touch, cocos2d::Event *) {
+    return onTouchBegan(touch);
+  };
+  listener->onTouchMoved = [&](cocos2d::Touch *touch, cocos2d::Event *) {
+    return onTouchMoved(touch);
+  };
+  listener->onTouchEnded = [&](cocos2d::Touch *touch, cocos2d::Event *) {
+    return onTouchEnded(touch);
+  };
 
   cocos2d::Director::getInstance()
       ->getEventDispatcher()
@@ -91,24 +96,22 @@ void MapController::loadMap(std::string map) {
 void MapController::onInit() {}
 
 void MapController::processInertialScroll(float delta) {
-  if (currentSpeed.length() < minScrollSpeed || touchActive) return;
+  if (currentSpeed.length() < minScrollSpeed || touchActive)
+    return;
   currentSpeed *= cocos2d::clampf(1.0 - scrollFriction * delta, 0.0, 0.99);
   auto dx = currentSpeed * delta;
   auto old = gameLayer->getPosition();
   gameLayer->setPosition(old + dx);
 }
 
-void MapController::onUpdate(float delta) { 
-  processInertialScroll(delta); 
-}
+void MapController::onUpdate(float delta) { processInertialScroll(delta); }
 
 void MapController::lookAt(cocos2d::Vec2 position) {
   gameLayer->setPosition(position);
 }
 
-void MapController::setScrollFriction(float friction){
+void MapController::setScrollFriction(float friction) {
   this->scrollFriction = friction;
 }
-
 }
 }

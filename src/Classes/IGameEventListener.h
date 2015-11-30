@@ -5,7 +5,7 @@
 namespace tsg {
 namespace game {
 class IGameEventListener {
- public:
+public:
   virtual void onInit() = 0;
   virtual void onUpdate(float) = 0;
   virtual ~IGameEventListener(){};
@@ -13,4 +13,4 @@ class IGameEventListener {
 }
 }
 
-#endif  // GAME_EVENT_LISTENER_H
+#endif // GAME_EVENT_LISTENER_H
