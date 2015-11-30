@@ -45,12 +45,12 @@ Please follow these steps to build and run game on your machine:
 
 #Notes for contributors
 
-Code formatting:
+#Code formatting:
 
 We respect netty codding and that's why we use Google-code style. 
 To keep code well-formated we preffer to util <code>clang-format</code> 3.8.0
 
-Change requests (CR):
+#Change requests (CR):
 
 We use CR's to:
 - add/mod/remove design-affecting components, that is those components which depend on, or dependent by other system components
@@ -58,11 +58,11 @@ We use CR's to:
 
 It's _strictly_ _prohibited_ to make any changes on mentioned above points without corresponding CR.
 
-Test:
+#Tests:
 
 We are TDD adepts. We deny untested, fragile code. Please read about TDD carefully before you start.
 
-Forks:
+#Forks:
 
 Push to master directly is not allowed. We preffer forks. To make a contribution u have to fork firstly, make a change, push it to your fork, create pull request and wait for approve and merge.
 If your PR is conflicting with existing code or just can't be merge for some any other reason it will be rejected.
