@@ -3,6 +3,7 @@
 
 #include "MapController.h"
 #include "MoveController.h"
+#include "EffectsController.h"
 #include "IGameEventListener.h"
 
 #include "cocos2d.h"
@@ -21,6 +22,8 @@ class GameController : public cocos2d::Layer {
   static GameController *p_instance;
   map::MapController *mapController;
   move::MoveController *moveController;
+  effect::EffectsController *effectsController;
+
   std::vector<IGameEventListener *> listeners;
 
  public:
@@ -35,10 +38,13 @@ class GameController : public cocos2d::Layer {
   void update(float) override;
   void injectControllers();
   void injectControllers(move::MoveController *moveController,
-                         map::MapController *mapController);
+                         map::MapController *mapController,
+                         effect::EffectsController *effectsController
+                         );
 
   map::MapController *getMapController();
   move::MoveController *getMoveController();
+  effect::EffectsController *getEffectsController();
   void registerListener(IGameEventListener *listener);
 };
 }

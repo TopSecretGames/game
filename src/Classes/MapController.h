@@ -1,19 +1,23 @@
 #ifndef MAP_CONTROLLER_H
 #define MAP_CONTROLLER_H
+#include <chrono>
 #include <string>
 #include <tuple>
 #include <vector>
-#include <chrono>
 
-#include "IMapEventListener.h"
 #include "IGameEventListener.h"
+#include "IMapEventListener.h"
+
 namespace tsg {
 namespace map {
 class MapController : public tsg::game::IGameEventListener {
   const float mapScrollSpeed = 1.2;
   const float minScrollSpeed = 20.0;
   float scrollFriction = 3.0;
-
+  cocos2d::Vec2 transitionFrom, transitionTo;
+  float transitionDuration=0, currentTransition=0;
+  std::string currentTransitionName;
+  bool transitionFinished = true;
   cocos2d::Vec2 previousTouchPosition;
   std::chrono::time_point<std::chrono::system_clock> previosTime;
   cocos2d::Vec2 currentSpeed;
@@ -38,6 +42,7 @@ class MapController : public tsg::game::IGameEventListener {
   bool onTouchEnded(cocos2d::Touch *);
 
   void processInertialScroll(float delta);
+  void processSmoothTransition(float delta);
 
  public:
   MapController(const MapController &);
@@ -46,6 +51,7 @@ class MapController : public tsg::game::IGameEventListener {
 
   virtual void loadMap(std::string);
   virtual void lookAt(cocos2d::Vec2);
+  virtual void lookAt(cocos2d::Vec2, float, std::string);
   void registerListener(IMapEventListener *);
   void setScrollFriction(float);
 };

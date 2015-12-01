@@ -1,6 +1,7 @@
-#include "MoveController.h"
 #include "GameController.h"
 #include "MapController.h"
+#include "MoveController.h"
+#include "EffectsController.h"
 
 #include "fakeit.hpp"
 
@@ -40,14 +41,18 @@ TEST_CASE("That player spawns well in spawn point and map is scrolled to it",
   cocos2d::TMXTiledMap map;
   map.setObjectGroups(groups);
 
+  auto spawnPoint = cocos2d::Vec2(1.0f, 2.0f);
   Mock<MapControllerMock> mapControllerMock;
-  When(Method(mapControllerMock, lookAt)).Return();
+  When(OverloadedMethod(mapControllerMock, lookAt, void(cocos2d::Vec2)))
+      .Return();
   ExposedController controller;
   auto gameController = tsg::game::GameController::getInstance();
-  gameController->injectControllers(&controller, &mapControllerMock.get());
+  tsg::effect::EffectsController effectsController;
+  gameController->injectControllers(&controller, &mapControllerMock.get(), &effectsController);
   controller.onMapLoad(&map);
-  auto spawnPoint = cocos2d::Vec2(1.0f, 2.0f);
   REQUIRE(controller.getPlayerSpawn() == spawnPoint);
   REQUIRE(controller.getPlayerPosition() == controller.getPlayerSpawn());
-  Verify(Method(mapControllerMock, lookAt).Using(spawnPoint)).Once();
+  Verify(OverloadedMethod(mapControllerMock, lookAt, void(cocos2d::Vec2))
+             .Using(spawnPoint))
+      .Once();
 }

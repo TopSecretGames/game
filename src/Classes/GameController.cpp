@@ -16,14 +16,15 @@ void tsg::game::GameController::registerListener(IGameEventListener *listener) {
 }
 
 void tsg::game::GameController::injectControllers() {
-  injectControllers(new move::MoveController(), new map::MapController(this));
+  injectControllers(new move::MoveController(), new map::MapController(this), new effect::EffectsController());
 }
 
 void tsg::game::GameController::injectControllers(
-    move::MoveController *moveController, map::MapController *mapController) {
+    move::MoveController *moveController, map::MapController *mapController, effect::EffectsController *effectsController) {
   CCLOG("initializing controllers");
   this->mapController = mapController;
   this->moveController = moveController;
+  this->effectsController = effectsController;
   CCLOG("controllers initialized");
 }
 
@@ -50,6 +51,10 @@ tsg::map::MapController *tsg::game::GameController::getMapController() {
 
 tsg::move::MoveController *tsg::game::GameController::getMoveController() {
   return this->moveController;
+}
+
+tsg::effect::EffectsController *tsg::game::GameController::getEffectsController() {
+  return this->effectsController;
 }
 
 tsg::game::GameController *tsg::game::GameController::p_instance = 0;
