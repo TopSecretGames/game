@@ -108,6 +108,9 @@ void MapController::onUpdate(float delta) { processInertialScroll(delta); }
 
 void MapController::lookAt(cocos2d::Vec2 position) {
   gameLayer->setPosition(position);
+  for(auto listener:this->mapEventListeners){
+    listener->onViewCoordinatesChanged(position);
+  }
 }
 
 void MapController::setScrollFriction(float friction) {

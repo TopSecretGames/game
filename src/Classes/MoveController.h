@@ -23,6 +23,7 @@ class MoveController : public map::IMapEventListener {
 
  public:
   virtual void onMapLoad(cocos2d::TMXTiledMap *) override;
+  virtual void onViewCoordinatesChanged(cocos2d::Vec2) override;
 };
 }
 }
