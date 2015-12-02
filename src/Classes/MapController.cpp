@@ -1,5 +1,7 @@
-#include "MapController.h"
 #include <iostream>
+#include "GameController.h"
+#include "MapController.h"
+#include "SmoothTransitionEffect.h"
 
 #include <random>
 
@@ -29,11 +31,10 @@ void MapController::loadMapFromFile(const std::string &map) {
 }
 
 void MapController::notifyListeners() {
-  for (auto listener : mapEventListeners)
-    listener->onMapLoad(this->currentMap);
+  for (auto listener : mapEventListeners) listener->onMapLoad(this->currentMap);
 }
 
-bool MapController::onTouchBegan(cocos2d::Touch *touch) {
+bool MapController::onTouchBegan(cocos2d::Touch *) {
   this->touchPositionStarted = gameLayer->getPosition();
   touchActive = true;
   return true;
@@ -64,8 +65,7 @@ bool MapController::onTouchEnded(cocos2d::Touch *touch) {
 
 void MapController::initTouchEvents() {
   static bool eventListenersInited = false;
-  if (eventListenersInited)
-    return;
+  if (eventListenersInited) return;
 
   this->listener = cocos2d::EventListenerTouchOneByOne::create();
   listener->setSwallowTouches(true);
@@ -96,8 +96,7 @@ void MapController::loadMap(std::string map) {
 void MapController::onInit() {}
 
 void MapController::processInertialScroll(float delta) {
-  if (currentSpeed.length() < minScrollSpeed || touchActive)
-    return;
+  if (currentSpeed.length() < minScrollSpeed || touchActive) return;
   currentSpeed *= cocos2d::clampf(1.0 - scrollFriction * delta, 0.0, 0.99);
   auto dx = currentSpeed * delta;
   auto old = gameLayer->getPosition();
@@ -107,10 +106,21 @@ void MapController::processInertialScroll(float delta) {
 void MapController::onUpdate(float delta) { processInertialScroll(delta); }
 
 void MapController::lookAt(cocos2d::Vec2 position) {
+  auto p = gameLayer->getPosition();
   gameLayer->setPosition(position);
   for(auto listener:this->mapEventListeners){
     listener->onViewCoordinatesChanged(position);
   }
+}
+
+void MapController::lookAt(cocos2d::Vec2 position, float duration,
+                           std::string name) {
+  auto gc = tsg::game::GameController::getInstance();
+  std::unique_ptr<effect::SmoothTransitionEffect> effect(
+      new effect::SmoothTransitionEffect(gameLayer->getPosition(), position,
+                                         duration, gameLayer));
+
+  gc->getEffectsController()->addEffect(std::move(effect));
 }
 
 void MapController::setScrollFriction(float friction) {
