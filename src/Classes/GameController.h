@@ -15,23 +15,20 @@ namespace game {
  */
 class GameController : public cocos2d::Layer {
  private:
-  GameController();
-  GameController(const GameController &);
-  GameController &operator=(GameController &);
-
-  static GameController *p_instance;
   map::MapController *mapController;
   move::MoveController *moveController;
   effect::EffectsController *effectsController;
 
   std::vector<IGameEventListener *> listeners;
+  static GameController *instance;
+  GameController();
 
  public:
   static GameController *getInstance() {
-    if (!p_instance) {
-      p_instance = new GameController();
+    if (!instance) {
+      instance = new GameController();
     }
-    return p_instance;
+    return instance;
   }
   static cocos2d::Scene *createScene();
   bool init() override;
