@@ -8,6 +8,7 @@ namespace map {
 class IMapEventListener {
 public:
   virtual void onMapLoad(cocos2d::TMXTiledMap *) = 0;
+  virtual void onViewCoordinatesChanged(cocos2d::Vec2) =0;
   virtual ~IMapEventListener(){};
 };
 }

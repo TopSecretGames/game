@@ -24,5 +24,8 @@ cocos2d::Vec2 MoveController::findPlayerSpawn() const {
   assert(point != cocos2d::Vec2::ZERO);
   return point;
 }
+
+void MoveController::onViewCoordinatesChanged(cocos2d::Vec2){};
+
 }
 }
