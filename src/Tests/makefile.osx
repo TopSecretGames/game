@@ -33,7 +33,7 @@ EXECUTABLE=run-tests
 all: $(SOURCES) $(EXECUTABLE)
 
 clean: 
-	find ./ -name "*.o" -delete
+	find ./ ../Classes -name "*.o" -delete
 
 $(EXECUTABLE): $(OBJECTS) 
 	$(CC) $(LDFLAGS) $(OBJECTS) -o $(OUTPUT_DIR)/$@

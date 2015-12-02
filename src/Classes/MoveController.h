@@ -3,6 +3,7 @@
 
 #include "IMapEventListener.h"
 #include "cocos2d.h"
+#include "IGameEventListener.h"
 
 namespace tsg {
 namespace move {
@@ -13,16 +14,20 @@ namespace move {
 
  Provides API to control objects position.
  */
-class MoveController : public map::IMapEventListener {
+class MoveController:
+    public map::IMapEventListener,
+    public game::IGameEventListener {
  protected:
   cocos2d::TMXTiledMap *map;
   cocos2d::Vec2 playerSpawn;
-  cocos2d::Vec2 playerPosiiton;
+  cocos2d::Vec2 playerPosition;
   virtual cocos2d::Vec2 findPlayerSpawn() const;
   virtual void respawnPlayer();
-
- public:
+  virtual void initSprite(cocos2d::Vec2);
   virtual void onMapLoad(cocos2d::TMXTiledMap *) override;
+  virtual void onUpdate(float) override;
+  virtual void onInit() override;
+ public:
 };
 }
 }
