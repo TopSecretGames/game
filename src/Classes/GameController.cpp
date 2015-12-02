@@ -1,7 +1,5 @@
 #include "GameController.h"
 
-#include <algorithm>
-
 cocos2d::Scene *tsg::game::GameController::createScene() {
   auto scene = cocos2d::Scene::create();
   auto controller = tsg::game::GameController::getInstance();
@@ -20,7 +18,10 @@ void tsg::game::GameController::injectControllers() {
 }
 
 void tsg::game::GameController::injectControllers(
-    move::MoveController *moveController, map::MapController *mapController, effect::EffectsController *effectsController) {
+    move::MoveController *moveController,
+    map::MapController *mapController,
+    effect::EffectsController *effectsController
+) {
   CCLOG("initializing controllers");
   this->mapController = mapController;
   this->moveController = moveController;
@@ -29,14 +30,20 @@ void tsg::game::GameController::injectControllers(
 }
 
 bool tsg::game::GameController::init() {
-  if (!Layer::init()) {
+  if (!cocos2d::Layer::init()) {
     return false;
   }
-  registerListener(mapController);
+  if (mapController) {
+    registerListener(mapController);
+  }
+  if (moveController) {
+    registerListener(moveController);
+  }
   for_each(listeners.begin(), listeners.end(),
            [](IGameEventListener *l) { l->onInit(); });
-  mapController->loadMap("data/map1.tmx");
   scheduleUpdate();
+  //todo remove it. lobby has to start game properly
+  mapController->loadMap("data/map1.tmx");
   return true;
 }
 
@@ -57,6 +64,6 @@ tsg::effect::EffectsController *tsg::game::GameController::getEffectsController(
   return this->effectsController;
 }
 
-tsg::game::GameController *tsg::game::GameController::p_instance = 0;
+tsg::game::GameController *tsg::game::GameController::instance = 0;
 
-tsg::game::GameController::GameController() {}
+tsg::game::GameController::GameController() { }
