@@ -13,7 +13,7 @@ namespace game {
 /*
  Manages game components
  */
-class GameController : public cocos2d::Layer {
+class GameController: public cocos2d::Layer {
  private:
   map::MapController *mapController;
   move::MoveController *moveController;
@@ -34,10 +34,11 @@ class GameController : public cocos2d::Layer {
   bool init() override;
   void update(float) override;
   void injectControllers();
-  void injectControllers(move::MoveController *moveController,
-                         map::MapController *mapController,
-                         effect::EffectsController *effectsController
-                         );
+  void injectControllers(
+      move::MoveController *moveController,
+      map::MapController *mapController,
+      effect::EffectsController *effectsController
+  );
 
   map::MapController *getMapController();
   move::MoveController *getMoveController();
