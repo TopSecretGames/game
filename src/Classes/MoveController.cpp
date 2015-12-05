@@ -2,7 +2,6 @@
 #include "GameController.h"
 
 #include <iostream>
-#include <CoreGraphics/CoreGraphics.h>
 
 namespace tsg {
 namespace move {
@@ -11,14 +10,13 @@ void MoveController::onMapLoad(TMXTiledMap *map) {
   this->map = map;
   this->playerSpawn = findPlayerSpawn();
   respawnPlayer();
-
   initSprite(playerSpawn);
 }
 
 void MoveController::respawnPlayer() {
   playerPosition = playerSpawn;
-//  auto gameController = game::GameController::getInstance();
-//  gameController->getMapController()->lookAt(playerSpawn);
+  auto gameController = game::GameController::getInstance();
+  gameController->getMapController()->lookAt(playerSpawn);
 }
 
 void MoveController::initSprite(Vec2 center) {
