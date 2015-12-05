@@ -45,26 +45,30 @@ void MoveController::initSprite(Vec2 center) {
   sprite->runAction(repeatAnimate);
 }
 
-Vec2 MoveController::findPlayerSpawn() const {
-  return findObjectWorldPosition("spawn point", "spawn1");
-}
-
-Vec2 MoveController::findObjectGridPosition(const std::string& layer, const std::string& name) const {
+Vec2 MoveController::findObjectGridPosition(const std::string &layer, const std::string &name) const {
   auto objectGroup = map->getObjectGroup(layer);
   assert(objectGroup != nullptr);
   auto sp = objectGroup->getObject(name);
   auto point = Vec2(sp["x"].asFloat(), sp["y"].asFloat());
   assert(point != Vec2::ZERO);
   auto tileSize = map->getTileSize();
-  auto x0y0 = map->getLayer("water")->getTileAt(Vec2(0, 0))->getPosition();
+  auto x0y0 = findWaterTile(Vec2(0, 0))->getPosition();
   auto translatedPoint = Vec2(point.x, x0y0.y - point.y);
   auto pointToPixels = CC_POINT_POINTS_TO_PIXELS(translatedPoint);
-  auto gridPoint = Vec2(ceilf(pointToPixels.x / tileSize.width * 2.0f), ceilf(pointToPixels.y / tileSize.height));
-  return Vec2(gridPoint.x, gridPoint.y);
+  auto ratio = tileSize.width / tileSize.height;
+  return Vec2(ceilf(pointToPixels.x / tileSize.width * ratio), ceilf(pointToPixels.y / tileSize.height));
 }
 
-Vec2 MoveController::findObjectWorldPosition(const std::string& layer, const std::string& name) const {
-  return map->getLayer("water")->getTileAt(findObjectGridPosition(layer, name))->getPosition();
+Vec2 MoveController::findObjectWorldPosition(const std::string &layer, const std::string &name) const {
+  return findWaterTile(findObjectGridPosition(layer, name))->getPosition();
+}
+
+Vec2 MoveController::findPlayerSpawn() const {
+  return findObjectWorldPosition("spawn point", "spawn1");
+}
+
+Sprite *MoveController::findWaterTile(Vec2 v) const {
+  return map->getLayer("water")->getTileAt(v);
 }
 
 void MoveController::onInit() {
