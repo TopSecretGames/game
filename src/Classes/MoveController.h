@@ -8,6 +8,8 @@
 namespace tsg {
 namespace move {
 
+using cocos2d::Vec2;
+using cocos2d::TMXTiledMap;
 /*
  Holds objects positioning and guarantees that
  their position will be valid to each other.
@@ -18,16 +20,18 @@ class MoveController:
     public map::IMapEventListener,
     public game::IGameEventListener {
  protected:
-  cocos2d::TMXTiledMap *map;
-  cocos2d::Vec2 playerSpawn;
-  cocos2d::Vec2 playerPosition;
-  virtual cocos2d::Vec2 findPlayerSpawn() const;
+  TMXTiledMap *map;
+  Vec2 playerSpawn;
+  Vec2 playerPosition;
+  virtual Vec2 findPlayerSpawn() const;
   virtual void respawnPlayer();
-  virtual void initSprite(cocos2d::Vec2);
-  virtual void onMapLoad(cocos2d::TMXTiledMap *) override;
+  virtual void initSprite(Vec2);
+  virtual Vec2 findObjectWorldPosition(const std::string&, const std::string&) const;
+  virtual Vec2 findObjectGridPosition(const std::string&, const std::string&) const;
+  virtual void onMapLoad(TMXTiledMap *) override;
   virtual void onUpdate(float) override;
   virtual void onInit() override;
-  virtual void onViewCoordinatesChanged(cocos2d::Vec2) override;
+  virtual void onViewCoordinatesChanged(Vec2) override;
  public:
 };
 }

@@ -4,13 +4,22 @@
 #include "fakeit.hpp"
 
 using namespace fakeit;
+using cocos2d::Vec2;
+using cocos2d::TMXTiledMap;
+using cocos2d::TMXLayer;
+using cocos2d::TMXObjectGroup;
+using cocos2d::Size;
+using cocos2d::Sprite;
+using cocos2d::ValueVector;
+using cocos2d::ValueMap;
+using cocos2d::Value;
 
 class MoveControllerStub: public tsg::move::MoveController {
  public:
-  virtual cocos2d::Vec2 getPlayerSpawn() const;
-  virtual cocos2d::Vec2 getPlayerPosition() const;
-  virtual void initSprite(cocos2d::Vec2) override;
-  virtual void onMapLoad(cocos2d::TMXTiledMap *) override;
+  virtual Vec2 getPlayerSpawn() const;
+  virtual Vec2 getPlayerPosition() const;
+  virtual void initSprite(Vec2) override;
+  virtual void onMapLoad(TMXTiledMap *) override;
   virtual void onInit() override;
   virtual void onUpdate(float) override;
 };
@@ -21,74 +30,86 @@ class MapControllerStub: public tsg::map::MapController {
   MapControllerStub() : MapController(nullptr) { }
 };
 
-class TMXTiledMapStub: public cocos2d::TMXTiledMap {
+class TMXTiledMapStub: public TMXTiledMap {
  public:
-  virtual cocos2d::TMXLayer *getLayer(const std::string &layerName) const override;
+  virtual TMXLayer *getLayer(const std::string &layerName) const;
+  virtual TMXObjectGroup *getObjectGroup(const std::string &groupName) const;
+  virtual const Size &getTileSize() const;
 };
 
 class TMXLayerStub: public cocos2d::TMXLayer {
 
  public:
-  virtual cocos2d::Sprite *getTileAt(const cocos2d::Vec2 &tileCoordinate) override;
+  virtual Sprite *getTileAt(const Vec2 &);
 };
 
-class SpriteStub: public cocos2d::Sprite {
+class SpriteStub: public Sprite {
 
  public:
-  virtual const cocos2d::Vec2 &getPosition() const override;
+  virtual const Vec2 &getPosition() const;
 };
 
 //=============================8<==================================
 
-void MoveControllerStub::initSprite(cocos2d::Vec2 vec2) { /*stubbed*/}
-void MoveControllerStub::onMapLoad(cocos2d::TMXTiledMap *map) { tsg::move::MoveController::onMapLoad(map);}
-void MoveControllerStub::onInit() { tsg::move::MoveController::onInit();}
-void MoveControllerStub::onUpdate(float d) { tsg::move::MoveController::onUpdate(d);}
+void MoveControllerStub::initSprite(Vec2) { /*stubbed*/}
+void MoveControllerStub::onMapLoad(TMXTiledMap *map) { tsg::move::MoveController::onMapLoad(map); }
+void MoveControllerStub::onInit() { tsg::move::MoveController::onInit(); }
+void MoveControllerStub::onUpdate(float d) { tsg::move::MoveController::onUpdate(d); }
+Vec2 MoveControllerStub::getPlayerSpawn() const { return playerSpawn; }
+Vec2 MoveControllerStub::getPlayerPosition() const { return playerPosition; }
 
-const cocos2d::Vec2 &SpriteStub::getPosition() const { return cocos2d::Vec2::ZERO; }
-cocos2d::TMXLayer *TMXTiledMapStub::getLayer(const std::string &layerName) const { return nullptr; }
-cocos2d::Sprite *TMXLayerStub::getTileAt(const cocos2d::Vec2 &tileCoordinate) { return nullptr; }
-cocos2d::Vec2 MoveControllerStub::getPlayerSpawn() const { return playerSpawn; }
-cocos2d::Vec2 MoveControllerStub::getPlayerPosition() const { return playerPosition; }
+TMXLayer *TMXTiledMapStub::getLayer(const std::string &) const { return nullptr; }
+TMXObjectGroup *TMXTiledMapStub::getObjectGroup(const std::string &) const { return nullptr; }
+const Size &TMXTiledMapStub::getTileSize() const { return Size::ZERO; }
+
+const Vec2 &SpriteStub::getPosition() const { return Vec2::ZERO; }
+Sprite *TMXLayerStub::getTileAt(const Vec2 &) { return nullptr; }
 
 //================================8<=======================================
 
-TEST_CASE("That player spawns well in spawn point and map is scrolled to it",
-          "[MoveController]") {
-  cocos2d::Vector<cocos2d::TMXObjectGroup *> groups;
-  cocos2d::TMXObjectGroup group;
-  group.setGroupName("spawn point");
-  cocos2d::ValueVector v;
-  cocos2d::ValueMap vp;
+TMXObjectGroup mkObjectGroup(Vec2 p) {
+  TMXObjectGroup group;
+  ValueVector v;
+  ValueMap vp;
   vp["name"] = "spawn1";
-  vp["x"] = cocos2d::Value(1.0f);
-  vp["y"] = cocos2d::Value(2.0f);
-  v.push_back(cocos2d::Value(vp));
+  vp["x"] = Value(p.x);
+  vp["y"] = Value(p.y);
+  v.push_back(Value(vp));
   group.setObjects(v);
-  groups.pushBack(&group);
-  TMXTiledMapStub mapStub;
-  mapStub.setObjectGroups(groups);
-  Mock<cocos2d::TMXTiledMap> mapMock(mapStub);
-  TMXLayerStub layerStub;
-  Mock<cocos2d::TMXLayer> layerMock(layerStub);
-  SpriteStub spriteStub;
-  Mock<cocos2d::Sprite> spriteMock(spriteStub);
-  auto spawnPoint = cocos2d::Vec2(1.0f, 2.0f);
-  When(ConstOverloadedMethod(spriteMock, getPosition,
-           const cocos2d::Vec2&())).Return(spawnPoint);
-  When(Method(layerMock, getTileAt)).Return(&spriteMock.get());
-  When(Method(mapMock, getLayer)).Return(&layerMock.get());
-
-  Mock<MapControllerStub> mapControllerMock;
-  When(OverloadedMethod(mapControllerMock, lookAt, void(cocos2d::Vec2))).Return();
-  MoveControllerStub moveControllerStub;
-  auto gameController = tsg::game::GameController::getInstance();
-  gameController->injectControllers(&moveControllerStub, &mapControllerMock.get(), nullptr);
-  moveControllerStub.onMapLoad(&mapStub);
-
-  REQUIRE(moveControllerStub.getPlayerSpawn() == spawnPoint);
-  REQUIRE(moveControllerStub.getPlayerPosition() == moveControllerStub.getPlayerSpawn());
-  //todo enable it when fixed
-//  Verify(Method(mapControllerMock, lookAt).Using(spawnPoint)).Once();
+  return group;
 }
 
+TEST_CASE("That player spawns well in spawn point and map is scrolled to spawn point correctly",
+          "[MoveController]") {
+  Mock<TMXLayerStub> layerMock;
+  Mock<TMXTiledMapStub> mapMock;
+  SpriteStub zeroPointSpriteStub;
+  Mock<Sprite> zeroPointSpriteMock(zeroPointSpriteStub);
+  SpriteStub spawnSpriteStub;
+  Mock<Sprite> spawnSpriteMock(spawnSpriteStub);
+  Mock<MapControllerStub> mapControllerMock;
+  MoveControllerStub moveControllerStub;
+  std::string spawnLayer = "spawn point";
+  auto gameController = tsg::game::GameController::getInstance();
+  auto zeroPointGrid = Vec2(0, 0);
+  auto zeroPointWorld = Vec2(1000.0f, 1000.0f);
+  auto spawnPointGrid = Vec2(4, 29);
+  auto spawnPointWorld = Vec2(100, 100);
+  auto tileSize = Size(64, 32);
+  auto group = mkObjectGroup(Vec2(100, 100));
+
+  gameController->injectControllers(&moveControllerStub, &mapControllerMock.get(), nullptr);
+
+  When(ConstOverloadedMethod(mapMock, getLayer,TMXLayer *(const std::string &)).Using("water")).AlwaysReturn(&layerMock.get());
+  When(ConstOverloadedMethod(zeroPointSpriteMock, getPosition,const Vec2&())).Return(zeroPointWorld);
+  When(ConstOverloadedMethod(spawnSpriteMock, getPosition,const Vec2&())).Return(spawnPointWorld);
+  When(Method(mapMock, getObjectGroup).Using(spawnLayer)).AlwaysReturn(&group);
+  When(Method(mapMock, getTileSize)).AlwaysReturn(tileSize);
+  When(Method(layerMock, getTileAt).Using(zeroPointGrid)).AlwaysReturn(&zeroPointSpriteMock.get());
+  When(Method(layerMock, getTileAt).Using(spawnPointGrid)).AlwaysReturn(&spawnSpriteMock.get());
+  When(OverloadedMethod(mapControllerMock, lookAt, void(Vec2))).Return();
+  moveControllerStub.onMapLoad(&mapMock.get());
+  REQUIRE(moveControllerStub.getPlayerSpawn() == spawnPointWorld);
+  REQUIRE(moveControllerStub.getPlayerPosition() == moveControllerStub.getPlayerSpawn());
+  Verify(OverloadedMethod(mapControllerMock, lookAt, void(Vec2)).Using(spawnPointWorld)).Once();
+}

@@ -6,32 +6,24 @@
 namespace tsg {
 namespace move {
 
-void MoveController::onMapLoad(cocos2d::TMXTiledMap *map) {
+void MoveController::onMapLoad(TMXTiledMap *map) {
   this->map = map;
   this->playerSpawn = findPlayerSpawn();
   respawnPlayer();
-
-  //hack allows to use sprite for now
-  //hack allows to use sprite for now
-  //hack allows to use sprite for now
-  auto k = cocos2d::Vec2((playerSpawn.x / (map->getTileSize().width) * 4.2f),
-                         (playerSpawn.y / (map->getTileSize().height)) * 2.4f);
-  auto t = map->getLayer("water")->getTileAt(k);
-  assert(t != nullptr);
-  auto p = t->getPosition();
-  std::cout << "spawning player at " << p.x << "," << p.y << std::endl;
-  initSprite(p);
+  initSprite(playerSpawn);
 }
 
 void MoveController::respawnPlayer() {
   playerPosition = playerSpawn;
-//  auto gameController = game::GameController::getInstance();
-//  gameController->getMapController()->lookAt(playerSpawn);
+  auto gameController = game::GameController::getInstance();
+  gameController->getMapController()->lookAt(playerSpawn);
 }
 
-void MoveController::initSprite(cocos2d::Vec2 center) {
+void MoveController::initSprite(Vec2 center) {
   auto sprite = cocos2d::Sprite::create();
   sprite->setPosition(center);
+
+  //todo calc Z correctly
   sprite->setLocalZOrder(2);
 
   map->addChild(sprite);
@@ -43,8 +35,8 @@ void MoveController::initSprite(cocos2d::Vec2 center) {
         "data/characters/knight/IDLE/0.png",
         cocos2d::Rect(i * 67, 0, 67, 137),
         false,
-        cocos2d::Vec2::ZERO,
-        cocos2d::Size(cocos2d::Vec2(67, 137)));
+        Vec2::ZERO,
+        cocos2d::Size(Vec2(67, 137)));
     animFrames.pushBack(frame);
   }
   auto animation = cocos2d::Animation::createWithSpriteFrames(animFrames, 0.1f);
@@ -53,13 +45,26 @@ void MoveController::initSprite(cocos2d::Vec2 center) {
   sprite->runAction(repeatAnimate);
 }
 
-cocos2d::Vec2 MoveController::findPlayerSpawn() const {
-  auto objectGroup = map->getObjectGroup("spawn point");
+Vec2 MoveController::findPlayerSpawn() const {
+  return findObjectWorldPosition("spawn point", "spawn1");
+}
+
+Vec2 MoveController::findObjectGridPosition(const std::string& layer, const std::string& name) const {
+  auto objectGroup = map->getObjectGroup(layer);
   assert(objectGroup != nullptr);
-  auto sp = objectGroup->getObject("spawn1");
-  auto point = cocos2d::Vec2(sp["x"].asFloat(), sp["y"].asFloat());
-  assert(point != cocos2d::Vec2::ZERO);
-  return point;
+  auto sp = objectGroup->getObject(name);
+  auto point = Vec2(sp["x"].asFloat(), sp["y"].asFloat());
+  assert(point != Vec2::ZERO);
+  auto tileSize = map->getTileSize();
+  auto x0y0 = map->getLayer("water")->getTileAt(Vec2(0, 0))->getPosition();
+  auto translatedPoint = Vec2(point.x, x0y0.y - point.y);
+  auto pointToPixels = CC_POINT_POINTS_TO_PIXELS(translatedPoint);
+  auto gridPoint = Vec2(ceilf(pointToPixels.x / tileSize.width * 2.0f), ceilf(pointToPixels.y / tileSize.height));
+  return Vec2(gridPoint.x, gridPoint.y);
+}
+
+Vec2 MoveController::findObjectWorldPosition(const std::string& layer, const std::string& name) const {
+  return map->getLayer("water")->getTileAt(findObjectGridPosition(layer, name))->getPosition();
 }
 
 void MoveController::onInit() {
@@ -71,7 +76,7 @@ void MoveController::onUpdate(float d) {
 
 }
 
-void MoveController::onViewCoordinatesChanged(cocos2d::Vec2){};
+void MoveController::onViewCoordinatesChanged(cocos2d::Vec2) { };
 
 }
 }
