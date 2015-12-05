@@ -97,7 +97,7 @@ void MapController::onInit() {}
 
 void MapController::processInertialScroll(float delta) {
   if (currentSpeed.length() < minScrollSpeed || touchActive) return;
-  currentSpeed *= cocos2d::clampf(1.0 - scrollFriction * delta, 0.0, 0.99);
+  currentSpeed *= cocos2d::clampf(1.0f - scrollFriction * delta, 0.0, 0.99);
   auto dx = currentSpeed * delta;
   auto old = gameLayer->getPosition();
   gameLayer->setPosition(old + dx);
@@ -106,8 +106,9 @@ void MapController::processInertialScroll(float delta) {
 void MapController::onUpdate(float delta) { processInertialScroll(delta); }
 
 void MapController::lookAt(cocos2d::Vec2 position) {
-  auto p = gameLayer->getPosition();
-  gameLayer->setPosition(position);
+  Vec2 viewSize(game::GameController::getInstance()->getContentSize());
+  auto point = (viewSize / 2 - position);
+  gameLayer->setPosition(point);
   for(auto listener:this->mapEventListeners){
     listener->onViewCoordinatesChanged(position);
   }
