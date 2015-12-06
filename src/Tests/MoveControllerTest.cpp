@@ -38,9 +38,11 @@ class TMXTiledMapStub: public TMXTiledMap {
 };
 
 class TMXLayerStub: public cocos2d::TMXLayer {
-
+ private:
+  std::map<Vec2, Sprite *> tiles;
  public:
-  virtual Sprite *getTileAt(const Vec2 &);
+  virtual Sprite *getTileAt(const Vec2&);
+  virtual void setTileAt(const Vec2, Sprite *);
 };
 
 //=============================8<==================================
@@ -56,7 +58,8 @@ TMXLayer *TMXTiledMapStub::getLayer(const std::string &) const { return nullptr;
 TMXObjectGroup *TMXTiledMapStub::getObjectGroup(const std::string &) const { return nullptr; }
 const Size &TMXTiledMapStub::getTileSize() const { return Size::ZERO; }
 
-Sprite *TMXLayerStub::getTileAt(const Vec2 &) { return nullptr; }
+Sprite *TMXLayerStub::getTileAt(const Vec2 &v) { return tiles[v]; }
+void TMXLayerStub::setTileAt(const Vec2 v, Sprite *sprite) { tiles[v] = sprite; }
 
 //================================8<=======================================
 
@@ -74,7 +77,7 @@ TMXObjectGroup mkObjectGroup(Vec2 p) {
 
 TEST_CASE("That player spawns well in spawn point and map is scrolled to spawn point correctly",
           "[MoveController]") {
-  Mock<TMXLayerStub> layerMock;
+  TMXLayerStub layerStub;
   Mock<TMXTiledMapStub> mapMock;
   Sprite zeroPointSpriteStub;
   Sprite spawnSpriteStub;
@@ -92,12 +95,15 @@ TEST_CASE("That player spawns well in spawn point and map is scrolled to spawn p
   gameController->injectControllers(&moveControllerStub, &mapControllerMock.get(), nullptr);
   zeroPointSpriteStub.setPosition(zeroPointWorld);
   spawnSpriteStub.setPosition(spawnPointWorld);
+  layerStub.setTileAt(zeroPointGrid, &zeroPointSpriteStub);
+  layerStub.setTileAt(spawnPointGrid, &spawnSpriteStub);
 
-  When(ConstOverloadedMethod(mapMock, getLayer,TMXLayer *(const std::string &)).Using("water")).AlwaysReturn(&layerMock.get());
+  When(ConstOverloadedMethod(mapMock, getLayer, TMXLayer *(
+           const std::string &)).Using("water")).AlwaysReturn(&layerStub);
   When(Method(mapMock, getObjectGroup).Using(spawnLayer)).AlwaysReturn(&group);
   When(Method(mapMock, getTileSize)).AlwaysReturn(tileSize);
-  When(Method(layerMock, getTileAt).Using(zeroPointGrid)).AlwaysReturn(&zeroPointSpriteStub);
-  When(Method(layerMock, getTileAt).Using(spawnPointGrid)).AlwaysReturn(&spawnSpriteStub);
+//  When(Method(layerMock, getTileAt).Using(zeroPointGrid)).AlwaysReturn(&zeroPointSpriteStub);
+//  When(Method(layerMock, getTileAt).Using(spawnPointGrid)).AlwaysReturn(&spawnSpriteStub);
   When(OverloadedMethod(mapControllerMock, lookAt, void(Vec2))).Return();
   moveControllerStub.onMapLoad(&mapMock.get());
   REQUIRE(moveControllerStub.getPlayerSpawn() == spawnPointWorld);
