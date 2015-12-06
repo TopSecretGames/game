@@ -3,7 +3,7 @@
 #
 
 CC=g++
-CFLAGS=-c -std=c++0x \
+CFLAGS=-c -w -std=c++0x \
 	-I ../Classes \
 	-I ../cocos2d/cocos \
 	-I ../cocos2d/external/glfw3/include/mac
