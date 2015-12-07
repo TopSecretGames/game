@@ -13,9 +13,13 @@ namespace map {
 class MapController : public tsg::game::IGameEventListener {
   const float mapScrollSpeed = 1.2;
   const float minScrollSpeed = 20.0;
+  const float dayTime = 2 * 60;  // seconds
+  const float nightTime = 1 * 60;
+  const float hoursPerDay = 24.0;
+
   float scrollFriction = 3.0;
   cocos2d::Vec2 transitionFrom, transitionTo;
-  float transitionDuration=0, currentTransition=0;
+  float transitionDuration = 0, currentTransition = 0;
   std::string currentTransitionName;
   bool transitionFinished = true;
   cocos2d::Vec2 previousTouchPosition;
@@ -29,6 +33,7 @@ class MapController : public tsg::game::IGameEventListener {
   cocos2d::Vec2 touchPositionStarted;
   cocos2d::Layer *gameLayer;
   cocos2d::TMXTiledMap *currentMap;
+  double currentTime;
   typedef std::tuple<std::string, std::string> MapType;
   typedef std::vector<MapType> MapCollection;
   void notifyListeners();
@@ -43,6 +48,7 @@ class MapController : public tsg::game::IGameEventListener {
 
   void processInertialScroll(float delta);
   void processSmoothTransition(float delta);
+  void processTiming(float delta);
 
  public:
   MapController(const MapController &);
