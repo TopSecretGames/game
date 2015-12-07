@@ -14,7 +14,11 @@ void tsg::game::GameController::registerListener(IGameEventListener *listener) {
 }
 
 void tsg::game::GameController::injectControllers() {
-  injectControllers(new move::MoveController(), new map::MapController(this), new effect::EffectsController());
+  injectControllers(
+          new move::MoveController(), 
+          new map::MapController(), 
+          new effect::EffectsController()
+  );
 }
 
 void tsg::game::GameController::injectControllers(

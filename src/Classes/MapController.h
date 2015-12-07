@@ -14,10 +14,6 @@ class MapController : public tsg::game::IGameEventListener {
   const float mapScrollSpeed = 1.2;
   const float minScrollSpeed = 20.0;
   float scrollFriction = 3.0;
-  cocos2d::Vec2 transitionFrom, transitionTo;
-  float transitionDuration=0, currentTransition=0;
-  std::string currentTransitionName;
-  bool transitionFinished = true;
   cocos2d::Vec2 previousTouchPosition;
   std::chrono::time_point<std::chrono::system_clock> previosTime;
   cocos2d::Vec2 currentSpeed;
@@ -29,6 +25,7 @@ class MapController : public tsg::game::IGameEventListener {
   cocos2d::Vec2 touchPositionStarted;
   cocos2d::Layer *gameLayer;
   cocos2d::TMXTiledMap *currentMap;
+  cocos2d::Scene *scene;
   typedef std::tuple<std::string, std::string> MapType;
   typedef std::vector<MapType> MapCollection;
   void notifyListeners();
@@ -46,8 +43,8 @@ class MapController : public tsg::game::IGameEventListener {
 
  public:
   MapController(const MapController &);
-  MapController(cocos2d::Layer *);
-  MapController(cocos2d::Layer *, std::string);
+  MapController();
+  MapController(std::string);
 
   virtual void loadMap(std::string);
   virtual void lookAt(cocos2d::Vec2);
