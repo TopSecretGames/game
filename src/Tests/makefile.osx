@@ -20,7 +20,9 @@ LDFLAGS=\
 	-framework Foundation \
 	-framework IOKit \
     -L. \
-    -lcocos2d
+    -lcocos2d \
+    -lz \
+    -liconv \
 
 OUTPUT_DIR=.
 SOURCES=$(wildcard *.cpp) $(wildcard ../Classes/*.cpp) 
