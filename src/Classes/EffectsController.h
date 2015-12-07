@@ -5,6 +5,7 @@
 #include "IGameEventListener.h"
 
 #include <map>
+#include <memory>
 
 namespace tsg {
 namespace effect {
