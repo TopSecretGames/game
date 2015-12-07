@@ -12,6 +12,8 @@ CMakeFiles
 Makefile
 cmake_install.cmake
 
+#ingore backup files
+*.bak
 
 # Compiled Object files
 *.slo
