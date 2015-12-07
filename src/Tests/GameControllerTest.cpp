@@ -9,7 +9,7 @@ using namespace fakeit;
 TEST_CASE("That game event listener got notified well", "[GameController]") {
   Mock<tsg::map::MapController> mapControllerMock;
   tsg::game::GameController *controller = tsg::game::GameController::getInstance();
-  controller->injectControllers(nullptr, &mapControllerMock.get(), nullptr);
+  controller->injectControllers(nullptr, &mapControllerMock.get(), nullptr, nullptr);
   When(Method(mapControllerMock, loadMap)).Return();
   When(Method(mapControllerMock, IGameEventListener::onInit)).Return();
   When(Method(mapControllerMock, IGameEventListener::onUpdate)).Return();

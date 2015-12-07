@@ -3,7 +3,7 @@
 
 #include "IBaseEffect.h"
 #include "IGameEventListener.h"
-
+#include <memory>
 #include <map>
 #include <memory>
 
