@@ -6,9 +6,13 @@
 namespace tsg {
 namespace map {
 class IMapEventListener {
-public:
+ public:
   virtual void onMapLoad(cocos2d::TMXTiledMap *) = 0;
-  virtual void onViewCoordinatesChanged(cocos2d::Vec2) =0;
+  virtual void onViewCoordinatesChange(cocos2d::Vec2) = 0;
+  virtual void onNightTime() = 0;
+  virtual void onDayTime() = 0;
+  virtual void onGameHourPass() = 0;
+
   virtual ~IMapEventListener(){};
 };
 }

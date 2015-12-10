@@ -110,14 +110,17 @@ void MapController::processInertialScroll(float delta) {
   gameLayer->setPosition(old + dx);
 }
 
-void MapController::onUpdate(float delta) { processInertialScroll(delta); }
+void MapController::onUpdate(float delta) {
+  processInertialScroll(delta);
+  processTiming(delta);
+}
 
 void MapController::lookAt(cocos2d::Vec2 position) {
   Vec2 viewSize(game::GameController::getInstance()->getContentSize());
   auto point = (viewSize / 2 - position);
   gameLayer->setPosition(point);
-  for(auto listener:this->mapEventListeners){
-    listener->onViewCoordinatesChanged(position);
+  for (auto listener : this->mapEventListeners) {
+    listener->onViewCoordinatesChange(position);
   }
 }
 
@@ -133,6 +136,38 @@ void MapController::lookAt(cocos2d::Vec2 position, float duration,
 
 void MapController::setScrollFriction(float friction) {
   this->scrollFriction = friction;
+}
+
+void MapController::processTiming(float delta) {
+  currentTime += delta;
+  static float lastHour = 0;
+  static float lastDay = 1;
+  static bool nightReported = false;
+  auto time =
+      std::fmod(currentTime, dayTime + nightTime) / (dayTime + nightTime);
+  auto hour = 1.0 / hoursPerDay;
+  auto dayLasts = dayTime / (dayTime + nightTime);
+
+  auto hourNormalized = std::fmod(time, hour) / hour;
+  auto stepHour = hourNormalized - lastHour;
+  auto stepDay = time - lastDay;
+  lastHour = hourNormalized;
+  lastDay = time;
+
+  if (stepHour < 0)
+    for (auto listener : this->mapEventListeners) listener->onGameHourPass();
+
+  if (stepDay < 0)
+    for (auto listener : this->mapEventListeners) listener->onDayTime();
+
+  if (time > dayLasts) {
+    if (!nightReported) {
+      nightReported = true;
+      for (auto listener : this->mapEventListeners) listener->onNightTime();
+    }
+  } else {
+    nightReported = false;
+  }
 }
 }
 }

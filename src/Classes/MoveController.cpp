@@ -42,6 +42,33 @@ void MoveController::initSprite(Vec2 center) {
   auto animation = cocos2d::Animation::createWithSpriteFrames(animFrames, 0.1f);
   auto animate = cocos2d::Animate::create(animation);
   auto repeatAnimate = cocos2d::RepeatForever::create(animate);
+  std::string vs = "attribute vec4 a_position;\
+  attribute vec4 a_color;\
+\
+  varying vec4 v_fragmentColor;\
+\
+  uniform vec4 u_color;\
+\
+  void main()\
+  {\
+        gl_Position = CC_MVPMatrix * a_position;\
+            v_fragmentColor = a_color * u_color;\
+  }";
+  std::string fs = "\
+    varying vec4 v_fragmentColor;\
+\
+  void main()\
+  {\
+        gl_FragColor = vec4(1.0, 0.0, 1.0, 1.0);\
+  }\
+    ";
+
+  auto prog = cocos2d::GLProgram::createWithByteArrays(vs.c_str(), fs.c_str());
+  prog->link();
+  std::cout << prog->getVertexShaderLog()
+    << prog->getFragmentShaderLog() 
+    << prog->getProgramLog();
+  sprite->setGLProgram(prog);
   sprite->runAction(repeatAnimate);
 }
 
@@ -80,7 +107,11 @@ void MoveController::onUpdate(float d) {
 
 }
 
-void MoveController::onViewCoordinatesChanged(cocos2d::Vec2) { };
+void MoveController::onViewCoordinatesChange(cocos2d::Vec2) { };
+void MoveController::onNightTime(){};
+void MoveController::onDayTime(){};
+void MoveController::onGameHourPass(){}; 
 
 }
+
 }
