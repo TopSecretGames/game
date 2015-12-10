@@ -2,7 +2,7 @@
 #
 #
 
-CC=clang++
+CC=g++
 CFLAGS=-c -w -std=c++0x \
 	-I ../Classes \
 	-I ../cocos2d/cocos \
@@ -20,7 +20,10 @@ LDFLAGS=\
 	-framework Foundation \
 	-framework IOKit \
     -L. \
-    -lcocos2d
+    -lcocos2d \
+    -lz \
+    -liconv
+		
 
 OUTPUT_DIR=.
 SOURCES=$(wildcard *.cpp) $(wildcard ../Classes/*.cpp) 
