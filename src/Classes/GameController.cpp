@@ -53,7 +53,6 @@ bool tsg::game::GameController::init() {
   }
   for_each(listeners.begin(), listeners.end(),
            [](IGameEventListener *l) { l->onInit(); });
-  scheduleUpdate();
   return true;
 }
 
@@ -63,7 +62,6 @@ void tsg::game::GameController::onStartGame() {
 }
 
 void tsg::game::GameController::update(float delta) {
-  std::cout << "upd\n";
   for_each(listeners.begin(), listeners.end(),
            [delta](IGameEventListener *l) { l->onUpdate(delta); });
 }
