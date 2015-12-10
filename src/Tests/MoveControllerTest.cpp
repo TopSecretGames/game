@@ -92,7 +92,7 @@ TEST_CASE("That player spawns well in spawn point and map is scrolled to spawn p
   auto tileSize = Size(64, 32);
   auto group = mkObjectGroup(Vec2(100, 100));
 
-  gameController->injectControllers(&moveControllerStub, &mapControllerMock.get(), nullptr);
+  gameController->injectControllers(&moveControllerStub, &mapControllerMock.get(), nullptr, nullptr);
   zeroPointSpriteStub.setPosition(zeroPointWorld);
   spawnSpriteStub.setPosition(spawnPointWorld);
   layerStub.setTileAt(zeroPointGrid, &zeroPointSpriteStub);

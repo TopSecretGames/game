@@ -107,10 +107,10 @@ void MoveController::onUpdate(float d) {
 
 }
 
-void MoveController::onViewCoordinatesChanged(cocos2d::Vec2) { };
+void MoveController::onViewCoordinatesChange(cocos2d::Vec2) { };
 void MoveController::onNightTime(){};
 void MoveController::onDayTime(){};
-void MoveController::onGameHourPassed(){}; 
+void MoveController::onGameHourPass(){}; 
 
 }
 

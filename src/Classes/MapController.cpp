@@ -120,7 +120,7 @@ void MapController::lookAt(cocos2d::Vec2 position) {
   auto point = (viewSize / 2 - position);
   gameLayer->setPosition(point);
   for (auto listener : this->mapEventListeners) {
-    listener->onViewCoordinatesChanged(position);
+    listener->onViewCoordinatesChange(position);
   }
 }
 
@@ -155,7 +155,7 @@ void MapController::processTiming(float delta) {
   lastDay = time;
 
   if (stepHour < 0)
-    for (auto listener : this->mapEventListeners) listener->onGameHourPassed();
+    for (auto listener : this->mapEventListeners) listener->onGameHourPass();
 
   if (stepDay < 0)
     for (auto listener : this->mapEventListeners) listener->onDayTime();

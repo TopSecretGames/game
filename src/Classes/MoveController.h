@@ -33,10 +33,10 @@ class MoveController:
   virtual void onMapLoad(TMXTiledMap *) override;
   virtual void onUpdate(float) override;
   virtual void onInit() override;
-  virtual void onViewCoordinatesChanged(Vec2) override;
+  virtual void onViewCoordinatesChange(Vec2) override;
   virtual void onNightTime();
   virtual void onDayTime();
-  virtual void onGameHourPassed();
+  virtual void onGameHourPass();
  public:
 };
 }
