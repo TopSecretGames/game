@@ -76,12 +76,8 @@ bool AppDelegate::applicationDidFinishLaunching() {
   }
 
   register_all_packages();
-
-  // create a scene. it's an autorelease object
-  auto scene = tsg::game::GameController::createScene();
-
-  // run
-  director->runWithScene(scene);
+  tsg::game::GameController::createScene();
+  tsg::game::GameController::getInstance()->init();
 
   return true;
 }

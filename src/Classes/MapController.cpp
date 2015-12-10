@@ -8,11 +8,11 @@
 namespace tsg {
 namespace map {
 using cocos2d::Vec2;
-MapController::MapController(cocos2d::Layer *layer, const std::string root)
-    : mapsRoot(root), gameLayer(layer){};
+MapController::MapController( const std::string root)
+    : mapsRoot(root){};
 
-MapController::MapController(cocos2d::Layer *layer)
-    : mapsRoot(""), gameLayer(layer){};
+MapController::MapController()
+    : mapsRoot(""){};
 MapController::MapController(const MapController &)
     : mapsRoot(""), currentMap(nullptr){};
 
@@ -28,6 +28,7 @@ void MapController::loadMapFromFile(const std::string &map) {
   cocos2d::Vec2 viewSize(gameLayer->getContentSize());
   auto center = (viewSize / 2 - mapSize / 2);
   gameLayer->setPosition(center);
+  cocos2d::Director::getInstance()->pushScene(scene);
 }
 
 void MapController::notifyListeners() {
@@ -93,7 +94,13 @@ void MapController::loadMap(std::string map) {
   initTouchEvents();
 }
 
-void MapController::onInit() {}
+void MapController::onInit() {
+  scene = cocos2d::Scene::create();
+  gameLayer = cocos2d::Layer::create();
+  gameLayer->init();
+  scene->init();
+  scene->addChild(gameLayer);
+}
 
 void MapController::processInertialScroll(float delta) {
   if (currentSpeed.length() < minScrollSpeed || touchActive) return;
@@ -118,7 +125,7 @@ void MapController::lookAt(cocos2d::Vec2 position) {
 }
 
 void MapController::lookAt(cocos2d::Vec2 position, float duration,
-                           std::string name) {
+                           std::string ) {
   auto gc = tsg::game::GameController::getInstance();
   std::unique_ptr<effect::SmoothTransitionEffect> effect(
       new effect::SmoothTransitionEffect(gameLayer->getPosition(), position,
