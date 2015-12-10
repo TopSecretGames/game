@@ -12,7 +12,7 @@ void tsg::game::GameController::registerListener(IGameEventListener *listener) {
 void tsg::game::GameController::injectControllers() {
   injectControllers(
           new move::MoveController(), 
-          new map::MapController(), 
+          new map::MapController(this), 
           new effect::EffectsController(),
           lobby::LobbyController::create()
   );
