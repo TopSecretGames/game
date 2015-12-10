@@ -21,7 +21,6 @@ class MoveControllerStub: public tsg::move::MoveController {
   virtual void initSprite(Vec2) override;
   virtual void onMapLoad(TMXTiledMap *) override;
   virtual void onInit() override;
-  virtual void onUpdate(float) override;
 };
 
 class MapControllerStub: public tsg::map::MapController {
@@ -50,7 +49,6 @@ class TMXLayerStub: public cocos2d::TMXLayer {
 void MoveControllerStub::initSprite(Vec2) { /*stubbed*/}
 void MoveControllerStub::onMapLoad(TMXTiledMap *map) { tsg::move::MoveController::onMapLoad(map); }
 void MoveControllerStub::onInit() { tsg::move::MoveController::onInit(); }
-void MoveControllerStub::onUpdate(float d) { tsg::move::MoveController::onUpdate(d); }
 Vec2 MoveControllerStub::getPlayerSpawn() const { return playerSpawn; }
 Vec2 MoveControllerStub::getPlayerPosition() const { return playerPosition; }
 

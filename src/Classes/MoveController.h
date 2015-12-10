@@ -31,7 +31,6 @@ class MoveController:
   virtual Vec2 findObjectWorldPosition(const std::string&, const std::string&) const;
   virtual Vec2 findObjectGridPosition(const std::string&, const std::string&) const;
   virtual void onMapLoad(TMXTiledMap *) override;
-  virtual void onUpdate(float) override;
   virtual void onInit() override;
   virtual void onViewCoordinatesChange(Vec2) override;
   virtual void onNightTime();

@@ -6,7 +6,6 @@ namespace game {
 class IGameEventListener {
 public:
   virtual void onInit() = 0;
-  virtual void onUpdate(float) = 0;
   virtual ~IGameEventListener(){};
 };
 }

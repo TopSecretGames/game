@@ -61,10 +61,6 @@ void tsg::game::GameController::onStartGame() {
     mapController->loadMap("data/map1.tmx");
 }
 
-void tsg::game::GameController::update(float delta) {
-  for_each(listeners.begin(), listeners.end(),
-           [delta](IGameEventListener *l) { l->onUpdate(delta); });
-}
 
 tsg::map::MapController *tsg::game::GameController::getMapController() {
   return this->mapController;

@@ -77,9 +77,6 @@ void MoveController::onInit() {
 }
 
 
-void MoveController::onUpdate(float d) {
-
-}
 
 void MoveController::onViewCoordinatesChange(cocos2d::Vec2) { };
 void MoveController::onNightTime(){};

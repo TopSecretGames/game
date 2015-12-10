@@ -14,8 +14,8 @@ class EffectsController: public game::IGameEventListener {
   std::map<std::string, std::unique_ptr<IBaseEffect>> effects;
 
  protected:
-  virtual void onUpdate(float) override;
   virtual void onInit() override;
+  void onUpdate(float );
 
  public:
   EffectsController();
