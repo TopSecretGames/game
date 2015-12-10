@@ -1,4 +1,5 @@
 #include "GameController.h"
+#include <iostream>
 
 void tsg::game::GameController::createScene() {
   auto controller = tsg::game::GameController::getInstance();
@@ -57,11 +58,12 @@ bool tsg::game::GameController::init() {
 }
 
 void tsg::game::GameController::onStartGame() {
-    cocos2d::Director::getInstance()->replaceScene(this->scene);
+    cocos2d::Director::getInstance()->pushScene(this->scene);
     mapController->loadMap("data/map1.tmx");
 }
 
 void tsg::game::GameController::update(float delta) {
+  std::cout << "upd\n";
   for_each(listeners.begin(), listeners.end(),
            [delta](IGameEventListener *l) { l->onUpdate(delta); });
 }

@@ -10,7 +10,7 @@
 
 namespace tsg {
 namespace map {
-class MapController : public tsg::game::IGameEventListener {
+class MapController :  public tsg::game::IGameEventListener {
   const float mapScrollSpeed = 1.2;
   const float minScrollSpeed = 20.0;
   const float dayTime = 2 * 60;  // seconds
