@@ -37,7 +37,6 @@ class GameController: public cocos2d::Layer, lobby::ILobbyEventListener {
   void onStartGame();
   static void createScene();
   bool init() override;
-  void update(float) override;
   void injectControllers();
   void injectControllers(
       move::MoveController *moveController,

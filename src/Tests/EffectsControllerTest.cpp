@@ -12,7 +12,7 @@ using namespace fakeit;
 
 class EffectsControllerStub : public EffectsController {
  public:
-  virtual void onUpdate(float) override;
+  virtual void onUpdate(float) ;
   virtual void onInit() override;
 };
 

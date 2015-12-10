@@ -23,17 +23,27 @@ void MapController::registerListener(IMapEventListener *listener) {
 void MapController::loadMapFromFile(const std::string &map) {
   auto path = mapsRoot + map;
   this->currentMap = cocos2d::TMXTiledMap::create(path);
+  
+  scene = cocos2d::Scene::create();
+  
+  scene->init();
+  cocos2d::Director::getInstance()->pushScene(scene);
+  gameLayer = new GameLoopLayer([&](float dt){this->onUpdate(dt);});
+  gameLayer->scheduleUpdate();
+  gameLayer->init();
   gameLayer->addChild(currentMap, 1);
+  scene->addChild(gameLayer);
   cocos2d::Vec2 mapSize(currentMap->getContentSize());
   cocos2d::Vec2 viewSize(gameLayer->getContentSize());
   auto center = (viewSize / 2 - mapSize / 2);
   gameLayer->setPosition(center);
-  cocos2d::Director::getInstance()->pushScene(scene);
+    
 }
 
 void MapController::notifyListeners() {
   for (auto listener : mapEventListeners) listener->onMapLoad(this->currentMap);
 }
+
 
 bool MapController::onTouchBegan(cocos2d::Touch *) {
   this->touchPositionStarted = gameLayer->getPosition();
@@ -95,11 +105,6 @@ void MapController::loadMap(std::string map) {
 }
 
 void MapController::onInit() {
-  scene = cocos2d::Scene::create();
-  gameLayer = cocos2d::Layer::create();
-  gameLayer->init();
-  scene->init();
-  scene->addChild(gameLayer);
 }
 
 void MapController::processInertialScroll(float delta) {
@@ -110,10 +115,15 @@ void MapController::processInertialScroll(float delta) {
   gameLayer->setPosition(old + dx);
 }
 
+void MapController::update(float delta){
+  onUpdate(delta);
+}
+
 void MapController::onUpdate(float delta) {
   processInertialScroll(delta);
   processTiming(delta);
 }
+
 
 void MapController::lookAt(cocos2d::Vec2 position) {
   Vec2 viewSize(game::GameController::getInstance()->getContentSize());

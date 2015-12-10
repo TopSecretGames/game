@@ -7,10 +7,11 @@
 
 #include "IGameEventListener.h"
 #include "IMapEventListener.h"
+#include "GameLoopLayer.h"
 
 namespace tsg {
 namespace map {
-class MapController : public tsg::game::IGameEventListener {
+class MapController :  public tsg::game::IGameEventListener {
   const float mapScrollSpeed = 1.2;
   const float minScrollSpeed = 20.0;
   const float dayTime = 2 * 60;  // seconds
@@ -27,7 +28,7 @@ class MapController : public tsg::game::IGameEventListener {
   std::vector<IMapEventListener *> mapEventListeners;
   cocos2d::EventListenerTouchOneByOne *listener;
   cocos2d::Vec2 touchPositionStarted;
-  cocos2d::Layer *gameLayer;
+  GameLoopLayer *gameLayer;
   cocos2d::TMXTiledMap *currentMap;
   double currentTime;
   cocos2d::Scene *scene;
@@ -46,6 +47,7 @@ class MapController : public tsg::game::IGameEventListener {
   void processInertialScroll(float delta);
   void processSmoothTransition(float delta);
   void processTiming(float delta);
+  virtual void update(float delta);
 
  public:
   MapController(const MapController &);
