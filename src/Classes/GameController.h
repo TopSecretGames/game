@@ -6,7 +6,6 @@
 #include "EffectsController.h"
 #include "LobbyController.h"
 #include "IGameEventListener.h"
-#include "ILobbyEventListener.h"
 
 #include "cocos2d.h"
 
@@ -15,7 +14,7 @@ namespace game {
 /*
  Manages game components
  */
-class GameController: public cocos2d::Layer, lobby::ILobbyEventListener {
+class GameController {
  private:
   map::MapController *mapController;
   move::MoveController *moveController;
@@ -34,9 +33,7 @@ class GameController: public cocos2d::Layer, lobby::ILobbyEventListener {
     }
     return instance;
   }
-  void onStartGame();
-  static void createScene();
-  bool init() override;
+  void init();
   void injectControllers();
   void injectControllers(
       move::MoveController *moveController,

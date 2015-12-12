@@ -2,7 +2,7 @@
 #
 #
 
-CC=g++
+CC=clang++
 CFLAGS=-c -w -std=c++0x \
 	-I ../Classes \
 	-I ../cocos2d/cocos \
