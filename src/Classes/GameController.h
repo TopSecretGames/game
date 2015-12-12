@@ -30,7 +30,6 @@ class GameController {
   static GameController *getInstance() {
     if (!instance) {
       instance = new GameController();
-      instance->init();
     }
     return instance;
   }

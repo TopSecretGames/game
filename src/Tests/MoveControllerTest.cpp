@@ -1,6 +1,8 @@
 #include "MoveController.h"
 #include "GameController.h"
 
+#include <assert.h>
+
 #include "fakeit.hpp"
 
 using cocos2d::Vec2;
@@ -14,7 +16,6 @@ using cocos2d::ValueMap;
 using cocos2d::Value;
 
 using std::string;
-using namespace fakeit;
 
 class MoveControllerStub: public tsg::move::MoveController {
  private:
@@ -34,10 +35,30 @@ class MoveControllerStub: public tsg::move::MoveController {
 };
 
 class MapControllerStub: public tsg::map::MapController {
+ private:
+  std::map<const Vec2, int> lookAtCalls;
+ public:
+  int lookAtTimes(const Vec2) const;
+  virtual void lookAt(Vec2) override;
   virtual void loadMapFromFile(const string &) { }
 };
 
 //=============================8<==================================
+
+int MapControllerStub::lookAtTimes(const Vec2 v) const{
+  auto it = lookAtCalls.find(v);
+  assert (it != lookAtCalls.end());
+  return lookAtCalls.find(v)->second;
+}
+
+void MapControllerStub::lookAt(Vec2 v) {
+  auto it = lookAtCalls.find(v);
+  if (it != lookAtCalls.end()) {
+    lookAtCalls[v] = it->second + 1;
+  } else {
+    lookAtCalls[v] = 1;
+  }
+}
 
 Sprite *MoveControllerStub::findWaterTile(const Vec2 v) const { return waterTiles.find(v)->second; }
 void MoveControllerStub::addWaterTile(const Vec2 v, Sprite *s) { waterTiles[v] = s; }
@@ -68,9 +89,9 @@ TEST_CASE("That player spawns well in spawn point and map is scrolled to spawn p
           "[MoveController]") {
   Sprite zeroPointSpriteStub;
   Sprite spawnSpriteStub;
-  Mock<MapControllerStub> mapControllerMock;
+  MapControllerStub mapControllerStub;
   MoveControllerStub moveControllerStub;
-  std::string spawnLayer = "spawn point";
+  string spawnLayer = "spawn point";
   auto gameController = tsg::game::GameController::getInstance();
   auto zeroPointGrid = Vec2(0, 0);
   auto zeroPointWorld = Vec2(1000.0f, 1000.0f);
@@ -81,13 +102,12 @@ TEST_CASE("That player spawns well in spawn point and map is scrolled to spawn p
   moveControllerStub.addWaterTile(zeroPointGrid, &zeroPointSpriteStub);
   moveControllerStub.addWaterTile(spawnPointGrid, &spawnSpriteStub);
 
-  gameController->injectControllers(&moveControllerStub, &mapControllerMock.get(), nullptr, nullptr);
+  gameController->injectControllers(&moveControllerStub, &mapControllerStub, nullptr, nullptr);
   zeroPointSpriteStub.setPosition(zeroPointWorld);
   spawnSpriteStub.setPosition(spawnPointWorld);
 
-  When(OverloadedMethod(mapControllerMock, lookAt, void(Vec2))).Return();
   moveControllerStub.onMapLoad(nullptr);
   REQUIRE(moveControllerStub.getPlayerSpawn() == spawnPointWorld);
   REQUIRE(moveControllerStub.getPlayerPosition() == moveControllerStub.getPlayerSpawn());
-  Verify(OverloadedMethod(mapControllerMock, lookAt, void(Vec2)).Using(spawnPointWorld)).Once();
+  REQUIRE(mapControllerStub.lookAtTimes(spawnPointWorld) == 1);
 }
