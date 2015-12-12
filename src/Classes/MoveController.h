@@ -11,6 +11,10 @@ namespace move {
 using cocos2d::Vec2;
 using cocos2d::TMXTiledMap;
 using cocos2d::Sprite;
+using cocos2d::TMXObjectGroup;
+using cocos2d::Size;
+
+using std::string;
 /*
  Holds objects positioning and guarantees that
  their position will be valid to each other.
@@ -24,12 +28,14 @@ class MoveController:
   TMXTiledMap *map;
   Vec2 playerSpawn;
   Vec2 playerPosition;
+  virtual Size calcTileSize() const; 
+  virtual TMXObjectGroup* findSpawnObject(const string&) const;
   virtual Vec2 findPlayerSpawn() const;
-  virtual void respawnPlayer();
+  void respawnPlayer();
   virtual void initSprite(Vec2);
-  virtual Sprite* findWaterTile(Vec2) const;
-  virtual Vec2 findObjectWorldPosition(const std::string&, const std::string&) const;
-  virtual Vec2 findObjectGridPosition(const std::string&, const std::string&) const;
+  virtual Sprite* findWaterTile(const Vec2) const;
+  virtual Vec2 findObjectWorldPosition(const string&, const string&) const;
+  virtual Vec2 findObjectGridPosition(const string&, const string&) const;
   virtual void onMapLoad(TMXTiledMap *) override;
   virtual void onInit() override;
   virtual void onViewCoordinatesChange(Vec2) override;
