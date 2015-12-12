@@ -40,9 +40,9 @@ class MoveController:
   void onMapLoad(TMXTiledMap *) override;
   void onInit() override;
   void onViewCoordinatesChange(Vec2) override;
-  void onNightTime();
-  void onDayTime();
-  void onGameHourPass();
+  void onNightTime() override;
+  void onDayTime() override;
+  void onGameHourPass() override;
  public:
 };
 }
