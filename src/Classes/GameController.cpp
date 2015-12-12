@@ -1,11 +1,6 @@
 #include "GameController.h"
 #include <iostream>
 
-void tsg::game::GameController::createScene() {
-  auto controller = tsg::game::GameController::getInstance();
-  controller->init();
-}
-
 void tsg::game::GameController::registerListener(IGameEventListener *listener) {
   this->listeners.push_back(listener);
 }
@@ -33,14 +28,8 @@ void tsg::game::GameController::injectControllers(
   CCLOG("controllers initialized");
 }
 
-bool tsg::game::GameController::init() {
-  this->scene = cocos2d::Scene::create();
-  this->scene->addChild(this);
+void tsg::game::GameController::init() {
   this->injectControllers();
-  
-  if (!cocos2d::Layer::init()) {
-    return false;
-  }
   if (mapController) {
     registerListener(mapController);
   }
@@ -49,18 +38,11 @@ bool tsg::game::GameController::init() {
   }
   if (lobbyController) {
     registerListener(lobbyController);
-    lobbyController->registerListener(this);
+    lobbyController->registerListener(mapController);
   }
   for_each(listeners.begin(), listeners.end(),
            [](IGameEventListener *l) { l->onInit(); });
-  return true;
 }
-
-void tsg::game::GameController::onStartGame() {
-    cocos2d::Director::getInstance()->pushScene(this->scene);
-    mapController->loadMap("data/map1.tmx");
-}
-
 
 tsg::map::MapController *tsg::game::GameController::getMapController() {
   return this->mapController;

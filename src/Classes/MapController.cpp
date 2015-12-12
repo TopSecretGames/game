@@ -44,6 +44,9 @@ void MapController::notifyListeners() {
   for (auto listener : mapEventListeners) listener->onMapLoad(this->currentMap);
 }
 
+void MapController::onStartGame() {
+  loadMap("data/map1.tmx");
+}
 
 bool MapController::onTouchBegan(cocos2d::Touch *) {
   this->touchPositionStarted = gameLayer->getPosition();
@@ -126,7 +129,7 @@ void MapController::onUpdate(float delta) {
 
 
 void MapController::lookAt(cocos2d::Vec2 position) {
-  Vec2 viewSize(game::GameController::getInstance()->getContentSize());
+  Vec2 viewSize(gameLayer->getContentSize());
   auto point = (viewSize / 2 - position);
   gameLayer->setPosition(point);
   for (auto listener : this->mapEventListeners) {

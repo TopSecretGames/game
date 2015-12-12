@@ -76,9 +76,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
   }
 
   register_all_packages();
-  tsg::game::GameController::createScene();
-  //tsg::game::GameController::getInstance()->init();
-
+  tsg::game::GameController::getInstance();
   return true;
 }
 

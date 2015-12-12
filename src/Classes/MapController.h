@@ -1,5 +1,6 @@
 #ifndef MAP_CONTROLLER_H
 #define MAP_CONTROLLER_H
+
 #include <chrono>
 #include <string>
 #include <tuple>
@@ -8,10 +9,13 @@
 #include "IGameEventListener.h"
 #include "IMapEventListener.h"
 #include "GameLoopLayer.h"
+#include "ILobbyEventListener.h"
 
 namespace tsg {
 namespace map {
-class MapController :  public tsg::game::IGameEventListener {
+class MapController :
+    public tsg::game::IGameEventListener,
+    public lobby::ILobbyEventListener {
   const float mapScrollSpeed = 1.2;
   const float minScrollSpeed = 20.0;
   const float dayTime = 2 * 60;  // seconds
@@ -49,6 +53,9 @@ class MapController :  public tsg::game::IGameEventListener {
   void processTiming(float delta);
   virtual void update(float delta);
 
+
+ public:
+  void onStartGame() override;
  public:
   MapController(const MapController &);
   MapController();
