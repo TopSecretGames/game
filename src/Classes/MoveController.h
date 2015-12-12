@@ -28,20 +28,21 @@ class MoveController:
   TMXTiledMap *map;
   Vec2 playerSpawn;
   Vec2 playerPosition;
-  virtual Size calcTileSize() const; 
-  virtual TMXObjectGroup* findSpawnObject(const string&) const;
+  virtual Size calcTileSize() const;
+  virtual TMXObjectGroup *findSpawnObject(const string &) const;
   virtual Vec2 findPlayerSpawn() const;
   void respawnPlayer();
   virtual void initSprite(Vec2);
-  virtual Sprite* findWaterTile(const Vec2) const;
-  virtual Vec2 findObjectWorldPosition(const string&, const string&) const;
-  virtual Vec2 findObjectGridPosition(const string&, const string&) const;
-  virtual void onMapLoad(TMXTiledMap *) override;
-  virtual void onInit() override;
-  virtual void onViewCoordinatesChange(Vec2) override;
-  virtual void onNightTime();
-  virtual void onDayTime();
-  virtual void onGameHourPass();
+  virtual Sprite *findWaterTile(const Vec2) const;
+  virtual Vec2 findObjectWorldPosition(const string &, const string &) const;
+  virtual Vec2 findObjectGridPosition(const string &, const string &) const;
+
+  void onMapLoad(TMXTiledMap *) override;
+  void onInit() override;
+  void onViewCoordinatesChange(Vec2) override;
+  void onNightTime();
+  void onDayTime();
+  void onGameHourPass();
  public:
 };
 }
