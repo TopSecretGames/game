@@ -80,7 +80,6 @@ Vec2 MoveController::findObjectGridPosition(const string &layer, const string &n
   auto x0y0 = findWaterTile(Vec2(0, 0))->getPosition();
   auto translatedPoint = Vec2(point.x, x0y0.y - point.y);
   auto pointToPixels = CC_POINT_POINTS_TO_PIXELS(translatedPoint);
-  std::cout<<"!!!!! point to pixels "<<pointToPixels.x<<std::endl; 
   auto ratio = tileSize.width / tileSize.height;
   return Vec2(ceilf(pointToPixels.x / tileSize.width * ratio), ceilf(pointToPixels.y / tileSize.height));
 }
@@ -98,13 +97,13 @@ Sprite *MoveController::findWaterTile(const Vec2 v) const {
 }
 
 void MoveController::onInit() {
-  game::GameController::getInstance()->getMapController()->registerListener(this);
+
 }
 
 void MoveController::onViewCoordinatesChange(cocos2d::Vec2) { };
 void MoveController::onNightTime(){};
 void MoveController::onDayTime(){};
-void MoveController::onGameHourPass(){}; 
+void MoveController::onGameHourPass(){};
 
 }
 

@@ -2,15 +2,26 @@
 #include <iostream>
 
 void tsg::game::GameController::registerListener(IGameEventListener *listener) {
-  this->listeners.push_back(listener);
+  if (listener != nullptr) {
+    this->listeners.push_back(listener);
+  }
 }
 
 void tsg::game::GameController::injectControllers() {
+  auto lobbyController = lobby::LobbyController::create();
+  auto moveController = new move::MoveController();
+  auto mapController = new map::MapController();
+  auto effectsController = new effect::EffectsController();
+
+  //inject dependencies
+  lobbyController->registerListener(mapController);
+  mapController->registerListener(moveController);
+
   injectControllers(
-          new move::MoveController(), 
-          new map::MapController(), 
-          new effect::EffectsController(),
-          lobby::LobbyController::create()
+      moveController,
+      mapController,
+      effectsController,
+      lobbyController
   );
 }
 
@@ -29,17 +40,9 @@ void tsg::game::GameController::injectControllers(
 }
 
 void tsg::game::GameController::init() {
-  this->injectControllers();
-  if (mapController) {
-    registerListener(mapController);
-  }
-  if (moveController) {
-    registerListener(moveController);
-  }
-  if (lobbyController) {
-    registerListener(lobbyController);
-    lobbyController->registerListener(mapController);
-  }
+  registerListener(mapController);
+  registerListener(moveController);
+  registerListener(lobbyController);
   for_each(listeners.begin(), listeners.end(),
            [](IGameEventListener *l) { l->onInit(); });
 }

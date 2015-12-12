@@ -77,6 +77,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
 
   register_all_packages();
   auto controller = tsg::game::GameController::getInstance();
+  controller->injectControllers();
   controller->init();
   return true;
 }
