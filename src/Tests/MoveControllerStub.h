@@ -27,7 +27,6 @@ class MoveControllerStub: public tsg::move::MoveController {
   virtual Vec2 getPlayerSpawn() const;
   virtual Vec2 getPlayerPosition() const;
   virtual TMXObjectGroup *findSpawnObject(const string &layer) const override;
-  virtual void initSprite(Vec2) override;
   virtual void onMapLoad(TMXTiledMap *) override;
   virtual void onInit() override;
   void addObjectGroup(string, TMXObjectGroup *);
