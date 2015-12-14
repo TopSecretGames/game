@@ -20,15 +20,19 @@ class MoveControllerStub: public tsg::move::MoveController {
   std::map<string, TMXObjectGroup *> objectGroups;
   std::map<const Vec2, Sprite *> waterTiles;
   bool initialized;
+
  public:
-  virtual bool isInitialized() const;
-  virtual Sprite *findWaterTile(const Vec2) const override;
-  virtual Size calcTileSize() const override;
-  virtual Vec2 getPlayerSpawn() const;
-  virtual Vec2 getPlayerPosition() const;
-  virtual TMXObjectGroup *findSpawnObject(const string &layer) const override;
-  virtual void onMapLoad(TMXTiledMap *) override;
-  virtual void onInit() override;
+  Vec2 getPlayerSpawn() const;
+  Vec2 getPlayerPosition() const;
+  Sprite *initSprite() const override;
+  bool isInitialized() const;
+  Sprite *findWaterTile(const Vec2) const override;
+  Size calcTileSize() const override;
+  TMXObjectGroup *findSpawnObject(const string &layer) const override;
+  void onMapLoad(TMXTiledMap *) override;
+  void onInit() override;
+  void initPathFinding() override;
+  void registerSceneUpdateCallback() override;
   void addObjectGroup(string, TMXObjectGroup *);
   void addWaterTile(const Vec2, Sprite *);
 };

@@ -33,7 +33,7 @@ void MoveController::onMapLoad(TMXTiledMap *map) {
   characters[name] = gc;
   respawnCharacter(name);
   initPathFinding();
-  //  registerSceneUpdateCallback();
+  registerSceneUpdateCallback();
 }
 void MoveController::initPathFinding() {
   pathFinding = new TMXPathFinding(map, TMXPathFinding::FOUR);
@@ -72,8 +72,8 @@ void MoveController::respawnCharacter(string &name) {
   //todo calc Z correctly
   sprite->setLocalZOrder(2);
   auto gameController = game::GameController::getInstance();
-//  gameController->getMapController()->lookAt(sprite->getPosition());
-  gameController->getMapController()->lookAt(findWaterTile(Vec2(0, 0))->getPosition());
+  gameController->getMapController()->lookAt(sprite->getPosition());
+//  gameController->getMapController()->lookAt(findWaterTile(Vec2(0, 0))->getPosition());
 }
 
 Sprite *MoveController::initSprite() const {

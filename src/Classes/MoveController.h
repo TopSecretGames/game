@@ -41,9 +41,9 @@ class MoveController:
   void respawnCharacter(string &name);
   virtual Sprite *initSprite() const;
   virtual Sprite *findWaterTile(const Vec2) const;
-  void registerSceneUpdateCallback();
+  virtual void registerSceneUpdateCallback();
   void cleanupPathFindingFlags() const;
-  void initPathFinding();
+  virtual void initPathFinding();
   Vec2 convertNodeToGridPosition(const Vec2 &) const;
   virtual Vec2 findObjectNodePosition(const string &, const string &) const;
   virtual Vec2 findObjectGridPosition(const string &, const string &) const;
