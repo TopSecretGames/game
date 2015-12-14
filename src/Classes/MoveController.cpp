@@ -177,7 +177,7 @@ void MoveController::cleanupPathFindingFlags() const {
     map->removeChild(existTargetFlag, true);
   }
   for (int i = 0; ; ++i) {
-    auto child = map->getChildByName("path_finding_flag_" + std::__1::to_string(i));
+    auto child = map->getChildByName("path_finding_flag_" + std::to_string(i));
     if (child != nullptr) {
       map->removeChild(child, true);
     } else {
