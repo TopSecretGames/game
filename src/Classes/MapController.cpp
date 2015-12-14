@@ -82,7 +82,6 @@ void MapController::initTouchEvents() {
   if (eventListenersInited) return;
 
   this->listener = cocos2d::EventListenerTouchOneByOne::create();
-  listener->setSwallowTouches(true);
 
   listener->onTouchBegan = [&](cocos2d::Touch *touch, cocos2d::Event *) {
     return onTouchBegan(touch);

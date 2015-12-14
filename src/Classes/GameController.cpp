@@ -15,6 +15,7 @@ void tsg::game::GameController::injectControllers() {
 
   //inject dependencies
   lobbyController->registerListener(mapController);
+  lobbyController->registerListener(moveController);
   mapController->registerListener(moveController);
 
   injectControllers(
